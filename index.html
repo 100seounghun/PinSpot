@@ -97,8 +97,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .loc-icon{width:88px;height:88px;background:var(--primary-l);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:44px;margin-bottom:24px}
 #locPrompt h2{font-size:22px;font-weight:800;line-height:1.4;margin-bottom:12px}
 #locPrompt p{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:32px}
-.btn-pri{width:100%;padding:15px;background:linear-gradient(135deg,#3B82F6,#2563EB);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:transform .15s}
+.btn-pri{width:100%;padding:15px;background:linear-gradient(135deg,#3B82F6,#2563EB);color:#fff;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;transition:transform .15s,opacity .15s}
 .btn-pri:active{transform:scale(.97)}
+.btn-pri:disabled{opacity:.65;cursor:not-allowed}
 .btn-sec{width:100%;padding:13px;background:transparent;color:var(--text2);border:2px solid var(--border);border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px}
 
 /* ── FEED ── */
@@ -122,7 +123,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .act-btn{border:none;background:none;cursor:pointer;display:flex;align-items:center;gap:5px;color:var(--text2);font-size:13px;padding:4px 0;font-family:inherit}
 .act-btn .i{font-size:18px}
 .act-btn.liked{color:var(--red)}
-.map-ref{margin-left:auto;font-size:12px;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:3px}
+.pc-map-btn{border:none;background:none;cursor:pointer;padding:4px 6px;font-size:17px;line-height:1;color:var(--text2);flex-shrink:0;transition:transform .15s,color .15s}
+.pc-map-btn:active{transform:scale(.88);color:var(--primary)}
 .more-btn{border:none;background:none;cursor:pointer;color:var(--text3);font-size:20px;padding:0 4px;line-height:1}
 
 /* ── POST CREATE ── */
@@ -158,16 +160,18 @@ textarea.pta:focus{border-color:var(--primary)}
 .ntf-dot{width:8px;height:8px;background:var(--primary);border-radius:50%;flex-shrink:0;margin-top:5px}
 
 /* ── PROFILE ── */
-.prof-hdr{padding:24px 16px 18px;display:flex;flex-direction:column;align-items:center;border-bottom:1px solid var(--border);background:#fff}
-.prof-name{font-size:20px;font-weight:800;margin-top:10px}
-.prof-id{font-size:12px;color:var(--text3);margin-top:2px}
-.prof-stats{display:flex;gap:28px;margin-top:14px}
-.stat{text-align:center}
-.stat-v{font-size:22px;font-weight:800;color:var(--primary)}
-.stat-l{font-size:11px;color:var(--text2);margin-top:1px}
-.edit-btn{margin-top:14px;padding:8px 24px;border:2px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;background:transparent;cursor:pointer;color:var(--text)}
+.prof-hdr{padding:14px 16px;background:#fff;border-bottom:1px solid var(--border)}
+.prof-hdr-top{display:flex;align-items:center;gap:12px;margin-bottom:0}
+.prof-name{font-size:17px;font-weight:800}
+.prof-id{font-size:11px;color:var(--text3);margin-top:2px}
+.prof-stats{display:flex;border-top:1px solid var(--border);margin-top:12px}
+.stat{flex:1;text-align:center;padding:10px 0;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-v{font-size:18px;font-weight:800;color:var(--primary)}
+.stat-l{font-size:10px;color:var(--text2);margin-top:1px}
+.edit-btn{padding:6px 14px;border:1.5px solid var(--border);border-radius:16px;font-size:12px;font-weight:600;background:transparent;cursor:pointer;color:var(--text);flex-shrink:0}
 .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:2px}
-.pgrid-item{aspect-ratio:1;background:var(--bg);overflow:hidden;cursor:pointer;position:relative}
+.pgrid-item{aspect-ratio:1;background:var(--bg);overflow:hidden;cursor:pointer;position:relative;transition:outline .15s,opacity .15s}
 .pgrid-item img{width:100%;height:100%;object-fit:cover}
 .pgrid-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;color:var(--text2);text-align:center;padding:6px;gap:4px}
 .settings-blk{padding:16px}
@@ -283,7 +287,7 @@ textarea.pta:focus{border-color:var(--primary)}
 .evt-dot.active{width:18px;background:var(--primary)}
 
 /* ── EVENT DETAIL SCREEN ── */
-#evtDetail{position:fixed;top:0;bottom:0;left:max(0px,calc(50vw - 215px));right:max(0px,calc(50vw - 215px));z-index:800;background:var(--bg);transform:translateX(100vw);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto;-webkit-overflow-scrolling:touch}
+#evtDetail{position:fixed;top:0;bottom:0;left:max(0px,calc(50vw - 215px));right:max(0px,calc(50vw - 215px));z-index:820;background:var(--bg);transform:translateX(100vw);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto;-webkit-overflow-scrolling:touch}
 #evtDetail.open{transform:translateX(0)}
 .ed-hdr{position:sticky;top:0;z-index:10;display:flex;align-items:center;padding:0 14px;height:var(--hh);background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);gap:8px}
 .ed-back{width:36px;height:36px;border:none;background:var(--bg);border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
@@ -399,6 +403,74 @@ textarea.pta:focus{border-color:var(--primary)}
 .chat-inp:focus{border-color:var(--primary)}
 .chat-send{background:var(--primary);border:none;border-radius:50%;width:38px;height:38px;cursor:pointer;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
 .chat-send:active{transform:scale(.88)}
+
+/* ── PROFILE MAP ── */
+.prof-map-wrap{height:200px;position:sticky;top:0;z-index:8;overflow:hidden;border-bottom:1px solid var(--border)}
+#profMapEl{width:100%;height:100%}
+/* ── PROFILE TABS ── */
+.prof-tabs{display:flex;background:#fff;border-bottom:2px solid var(--border);position:sticky;top:0;z-index:9}
+.prof-tab{flex:1;padding:11px;border:none;background:transparent;font-size:13px;font-weight:700;color:var(--text3);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;font-family:inherit}
+.prof-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+/* ── PROFILE TIMELINE ── */
+#profTimeline .post-card{border-left:none;border-right:none}
+/* ── PROFILE MAP (between tabs and grid) ── */
+/* ── EVENTS FULL-SCREEN ── */
+#evtFull{position:fixed;top:0;bottom:0;left:max(0px,calc(50vw - 215px));right:max(0px,calc(50vw - 215px));z-index:810;background:var(--bg);transform:translateX(100vw);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto;-webkit-overflow-scrolling:touch}
+#evtFull.open{transform:translateX(0)}
+.evtf-hdr{position:sticky;top:0;z-index:10;display:flex;align-items:center;padding:0 14px;height:var(--hh);background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);gap:8px}
+.evtf-list{padding:10px 0 40px}
+.evtf-card{margin:10px 16px;border-radius:22px;overflow:hidden;cursor:pointer;position:relative;transition:transform .18s;box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.evtf-card:active{transform:scale(.97)}
+.evtf-body{padding:22px 20px 20px;display:flex;flex-direction:column}
+.evtf-emoji{font-size:38px;margin-bottom:10px}
+.evtf-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:6px;line-height:1.2}
+.evtf-meta{font-size:12px;color:rgba(255,255,255,.82);display:flex;gap:12px;align-items:center}
+.evtf-dday{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.22);color:#fff;font-size:12px;font-weight:800;padding:5px 12px;border-radius:10px;border:1.5px solid rgba(255,255,255,.35)}
+.evtf-dist{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.25);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;backdrop-filter:blur(4px)}
+/* ── USER PROFILE PANEL ── */
+#userProf{position:fixed;top:0;bottom:0;left:max(0px,calc(50vw - 215px));right:max(0px,calc(50vw - 215px));z-index:820;background:var(--bg);transform:translateX(100vw);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto;-webkit-overflow-scrolling:touch}
+#userProf.open{transform:translateX(0)}
+.uprof-hdr{position:sticky;top:0;z-index:10;display:flex;align-items:center;padding:0 14px;height:var(--hh);background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);gap:8px}
+#userProf .prof-tabs{top:var(--hh)}
+#userProf .prof-map-wrap{top:calc(var(--hh) + 40px)}
+.follow-btn{padding:7px 16px;border:none;border-radius:18px;font-size:13px;font-weight:700;background:var(--primary);color:#fff;cursor:pointer;flex-shrink:0;transition:all .18s}
+.follow-btn:active{transform:scale(.93)}
+.follow-btn.following{background:var(--bg);border:1.5px solid var(--border);color:var(--text2)}
+.msg-btn{width:36px;height:36px;border:1.5px solid var(--border);border-radius:50%;font-size:17px;background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s}
+.msg-btn:active{transform:scale(.9);background:var(--bg)}
+.stat.clickable{cursor:pointer}
+.stat.clickable:active .stat-v{color:var(--primary-d)}
+.fl-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.fl-item:last-child{border-bottom:none}
+.fl-item:active{background:var(--bg)}
+.fl-info{flex:1;min-width:0}
+.fl-name{font-size:14px;font-weight:700;color:var(--text)}
+.fl-id{font-size:11px;color:var(--text3);margin-top:2px}
+.pc-user{display:flex;align-items:center;gap:10px;flex:1;min-width:0;cursor:pointer}
+.pc-user:active .pc-name{color:var(--primary)}
+/* ── PINS FROM HERE ── */
+.pfh-section{padding:16px 0 28px;border-top:1px solid var(--border)}
+.pfh-hdr{font-size:14px;font-weight:800;color:var(--text);padding:0 16px 12px;display:flex;align-items:center;gap:6px}
+.pfh-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 16px;display:flex;gap:10px}
+.pfh-scroll::-webkit-scrollbar{display:none}
+.pfh-card{min-width:140px;max-width:140px;background:#fff;border-radius:14px;overflow:hidden;border:1px solid var(--border);cursor:pointer;flex-shrink:0;transition:transform .15s;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.pfh-card:active{transform:scale(.96)}
+.pfh-img{width:100%;height:88px;object-fit:cover;display:block}
+.pfh-ph{width:100%;height:88px;background:var(--primary-l);display:flex;align-items:center;justify-content:center;font-size:26px}
+.pfh-info{padding:8px 10px 10px}
+.pfh-name{font-size:12px;font-weight:700;color:var(--text)}
+.pfh-txt{font-size:11px;color:var(--text2);margin-top:2px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-clamp:2}
+.pfh-dist{font-size:10px;color:var(--primary);margin-top:4px;font-weight:700}
+/* ── SETTINGS MODAL ── */
+.settings-modal-body{padding:14px 16px 28px}
+/* ── EVT TITLE CLICKABLE ── */
+.evt-section-title{cursor:pointer;transition:opacity .15s}
+.evt-section-title:active{opacity:.65}
+.evt-more-link{font-size:12px;color:var(--primary);font-weight:700;cursor:pointer;padding:2px 0}
+.evt-more-link:active{opacity:.65}
+/* ── ED MAP CLICKABLE ── */
+.ed-map-wrap{cursor:pointer}
+.ed-map-wrap:active{opacity:.9}
 </style>
 </head>
 <body>
@@ -420,6 +492,7 @@ textarea.pta:focus{border-color:var(--primary)}
     <b id="hdrTitle">PinSpot</b>
   </div>
   <div class="hdr-right">
+    <button class="icon-btn" id="settingsBtn" onclick="openSettingsModal()" title="설정" style="display:none">⚙️</button>
     <button class="icon-btn" id="rBtn" onclick="openRadiusModal()" style="display:none">🎯</button>
     <button class="icon-btn" onclick="goTab('notifications')" title="알림">
       🔔<span class="badge" id="ntfBadge" style="display:none">0</span>
@@ -432,8 +505,8 @@ textarea.pta:focus{border-color:var(--primary)}
   <!-- 행사 배너 -->
   <div class="evt-section" id="evtSection">
     <div class="evt-section-hdr">
-      <h3>🎪 주변 축제 · 행사</h3>
-      <span>이번 주 추천</span>
+      <h3 class="evt-section-title" onclick="openEvtFull()">🎪 주변 축제 · 행사</h3>
+      <span class="evt-more-link" onclick="openEvtFull()">전체보기 ›</span>
     </div>
     <div class="evt-nav">
       <button class="evt-arrow evt-arrow-l" id="evtArrowL" onclick="evtArrow(-1)">‹</button>
@@ -548,38 +621,23 @@ textarea.pta:focus{border-color:var(--primary)}
 <!-- ═══════════ PROFILE SCREEN ═══════════ -->
 <div class="scr" id="s-profile">
   <div class="prof-hdr">
-    <div class="av l" id="profAv"></div>
-    <div class="prof-name" id="profName"></div>
-    <div class="prof-id" id="profId"></div>
+    <div class="prof-hdr-top">
+      <div class="av m" id="profAv"></div>
+      <div style="flex:1;min-width:0">
+        <div class="prof-name" id="profName"></div>
+        <div class="prof-id" id="profId"></div>
+      </div>
+      <button class="edit-btn" onclick="openEditProf()">편집</button>
+    </div>
     <div class="prof-stats">
       <div class="stat"><div class="stat-v" id="stP">0</div><div class="stat-l">게시물</div></div>
-      <div class="stat"><div class="stat-v" id="stL">0</div><div class="stat-l">좋아요</div></div>
-      <div class="stat"><div class="stat-v" id="stC">0</div><div class="stat-l">댓글</div></div>
-    </div>
-    <button class="edit-btn" onclick="openEditProf()">프로필 편집</button>
-  </div>
-  <div style="padding:12px 14px 6px"><span style="font-size:12px;font-weight:700;color:var(--text2)">나의 게시물</span></div>
-  <div class="pgrid" id="pgrid"></div>
-  <div class="settings-blk">
-    <div class="s-label">설정</div>
-    <div class="s-card">
-      <div class="s-row" onclick="openRadiusModal()">
-        <div class="s-ico" style="background:#EFF6FF">🎯</div>
-        <div class="s-txt"><div class="t">위치 반경</div><div class="sub">게시물 검색 반경</div></div>
-        <span class="s-val" id="settR">1km</span><span class="s-arr">›</span>
-      </div>
-      <div class="s-row" onclick="addDemo()">
-        <div class="s-ico" style="background:#F0FDF4">✨</div>
-        <div class="s-txt"><div class="t">데모 게시물 추가</div><div class="sub">주변 게시물 예시 불러오기</div></div>
-        <span class="s-arr">›</span>
-      </div>
-      <div class="s-row" onclick="clearAll()">
-        <div class="s-ico" style="background:#FEF2F2">🗑️</div>
-        <div class="s-txt"><div class="t">데이터 초기화</div><div class="sub">모든 게시물 삭제</div></div>
-        <span class="s-arr">›</span>
-      </div>
+      <div class="stat clickable" onclick="openMeFollowList('followers')"><div class="stat-v" id="stFr">0</div><div class="stat-l">팔로워</div></div>
+      <div class="stat clickable" onclick="openMeFollowList('following')"><div class="stat-v" id="stFg">0</div><div class="stat-l">팔로잉</div></div>
     </div>
   </div>
+  <!-- 발자취 지도 -->
+  <div class="prof-map-wrap" id="profMapWrap"><div id="profMapEl"></div></div>
+  <div id="profTimeline"></div>
 </div>
 
 <!-- ═══════════ MESSAGES SCREEN ═══════════ -->
@@ -635,6 +693,15 @@ textarea.pta:focus{border-color:var(--primary)}
   </div>
 </div>
 
+<!-- ═══════════ EVENTS FULL SCREEN ═══════════ -->
+<div id="evtFull">
+  <div class="evtf-hdr">
+    <button class="ed-back" onclick="history.back()">‹</button>
+    <span style="font-size:15px;font-weight:700">🎪 주변 축제 · 행사</span>
+  </div>
+  <div class="evtf-list" id="evtFullList"></div>
+</div>
+
 <!-- ═══════════ CHAT VIEW ═══════════ -->
 <div id="chatView">
   <div class="chat-hdr">
@@ -648,6 +715,82 @@ textarea.pta:focus{border-color:var(--primary)}
   <div class="chat-inp-row">
     <input class="chat-inp" id="chatInp" type="text" placeholder="메시지 입력…" maxlength="300" onkeydown="if(event.key==='Enter')sendDM()">
     <button class="chat-send" onclick="sendDM()">↑</button>
+  </div>
+</div>
+
+<!-- ═══════════ USER PROFILE PANEL ═══════════ -->
+<div id="userProf">
+  <div class="uprof-hdr">
+    <button class="ed-back" onclick="history.back()">‹</button>
+    <span class="ed-hdr-title" id="uprofHdrName"></span>
+  </div>
+  <div class="prof-hdr">
+    <div class="prof-hdr-top">
+      <div class="av m" id="uprofAv"></div>
+      <div style="flex:1;min-width:0">
+        <div class="prof-name" id="uprofName"></div>
+        <div class="prof-id" id="uprofId"></div>
+      </div>
+      <button class="follow-btn" id="uprofFollowBtn" onclick="toggleFollow()">팔로우</button>
+      <button class="msg-btn" onclick="openDMFromProf()" title="메시지 보내기">✉️</button>
+    </div>
+    <div class="prof-stats">
+      <div class="stat"><div class="stat-v" id="upStP">0</div><div class="stat-l">게시물</div></div>
+      <div class="stat clickable" onclick="openUprofFollowList('followers')"><div class="stat-v" id="upStFr">0</div><div class="stat-l">팔로워</div></div>
+      <div class="stat clickable" onclick="openUprofFollowList('following')"><div class="stat-v" id="upStFg">0</div><div class="stat-l">팔로잉</div></div>
+    </div>
+  </div>
+  <div class="prof-tabs">
+    <button class="prof-tab active" id="uptab-grid" onclick="switchUprofTab('grid')">⊞ 그리드</button>
+    <button class="prof-tab" id="uptab-timeline" onclick="switchUprofTab('timeline')">≡ 타임라인</button>
+  </div>
+  <div class="prof-map-wrap" id="uprofMapWrap"><div id="uprofMapEl"></div></div>
+  <div class="pgrid" id="uprofGrid"></div>
+  <div id="uprofTimeline" style="display:none"></div>
+</div>
+
+<!-- ═══════════ FOLLOW LIST MODAL ═══════════ -->
+<div class="overlay" id="mo-follow-list" onclick="if(event.target===this)history.back()">
+  <div class="modal" style="max-height:70vh">
+    <div class="m-handle"></div>
+    <div class="m-head">
+      <span class="m-title" id="flTitle">팔로워</span>
+      <button class="m-close" onclick="history.back()">✕</button>
+    </div>
+    <div class="m-body" id="flList" style="padding:0;overflow-y:auto"></div>
+  </div>
+</div>
+
+<!-- ═══════════ SETTINGS MODAL ═══════════ -->
+<div class="overlay" id="mo-settings" onclick="if(event.target===this)history.back()">
+  <div class="modal">
+    <div class="m-handle"></div>
+    <div class="m-head">
+      <span class="m-title">⚙️ 설정</span>
+      <button class="m-close" onclick="history.back()">✕</button>
+    </div>
+    <div class="m-body">
+      <div class="settings-modal-body">
+        <div class="s-label" style="margin-bottom:8px">앱 설정</div>
+        <div class="s-card">
+          <div class="s-row" onclick="openRadiusModal()">
+            <div class="s-ico" style="background:#EFF6FF">🎯</div>
+            <div class="s-txt"><div class="t">위치 반경</div><div class="sub">게시물 검색 반경</div></div>
+            <span class="s-val" id="settR">1km</span><span class="s-arr">›</span>
+          </div>
+          <div class="s-row" onclick="addDemo()">
+            <div class="s-ico" style="background:#F0FDF4">✨</div>
+            <div class="s-txt"><div class="t">데모 게시물 추가</div><div class="sub">주변 게시물 예시 불러오기</div></div>
+            <span class="s-arr">›</span>
+          </div>
+          <div class="s-row" onclick="clearAll()">
+            <div class="s-ico" style="background:#FEF2F2">🗑️</div>
+            <div class="s-txt"><div class="t">데이터 초기화</div><div class="sub">모든 게시물 삭제</div></div>
+            <span class="s-arr">›</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -758,6 +901,7 @@ let postLoc = null; // null = use LOC, {lat,lng} = custom map selection
 let lpMap = null, lpMarker = null, lpSelected = null;
 let FEED_LOC = null; // null = use LOC, {lat,lng,label} = map pin
 let mapPinMode = false, mapFeedPin = null, mapFeedPinSelected = null;
+let profMapObj = null, profMapMarkers = [], _profActivePid = null, _profScrollSpyHandler = null;
 
 // ── Kakao Maps async ready system ──
 let _kakaoReady = false;
@@ -837,14 +981,64 @@ function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(
 // ═══════════════════════════════════════════════
 // GEOLOCATION
 // ═══════════════════════════════════════════════
+// Mobile browsers can silently swallow getCurrentPosition (e.g. iOS with
+// Location Services off, Android WebView ignoring the `timeout` option),
+// leaving the button looking unresponsive. We add: a tap-state guard, a
+// manual fallback timer, and a visual "loading" state so the user always
+// gets feedback within ~10 seconds.
+let _locReqInFlight = false;
+let _locFallbackTimer = null;
+
 function reqLoc(){
-  if(!navigator.geolocation){ demoLoc(); return; }
-  navigator.geolocation.getCurrentPosition(
-    p=>{ LOC={lat:p.coords.latitude,lng:p.coords.longitude}; boot(); },
-    ()=>{ toast('위치를 가져올 수 없어 데모 모드로 시작합니다.'); demoLoc(); },
-    {timeout:10000,maximumAge:60000}
-  );
+  if(_locReqInFlight) return;            // ignore rapid double-taps
+  _locReqInFlight = true;
+  _setLocBtnPending(true);
+  if(!navigator.geolocation){ _finishLocReq(); demoLoc(); return; }
+  // Safety net: fire demo mode after 10s if no callback came back.
+  _locFallbackTimer = setTimeout(()=>{
+    if(!_locReqInFlight) return;
+    _finishLocReq();
+    toast('위치 응답이 없어 데모 모드로 시작합니다.');
+    demoLoc();
+  }, 10000);
+  try{
+    navigator.geolocation.getCurrentPosition(
+      p=>{
+        if(!_locReqInFlight) return;     // already fell back
+        _finishLocReq();
+        LOC={lat:p.coords.latitude, lng:p.coords.longitude};
+        boot();
+      },
+      err=>{
+        if(!_locReqInFlight) return;
+        _finishLocReq();
+        const denied = err && err.code === 1;  // PERMISSION_DENIED
+        toast(denied ? '위치 권한이 거부되어 데모 모드로 시작합니다.'
+                     : '위치를 가져올 수 없어 데모 모드로 시작합니다.');
+        demoLoc();
+      },
+      {timeout:8000, maximumAge:60000, enableHighAccuracy:false}
+    );
+  } catch(e){
+    _finishLocReq();
+    toast('위치 요청 중 오류가 발생해 데모 모드로 시작합니다.');
+    demoLoc();
+  }
 }
+
+function _finishLocReq(){
+  _locReqInFlight = false;
+  if(_locFallbackTimer){ clearTimeout(_locFallbackTimer); _locFallbackTimer = null; }
+  _setLocBtnPending(false);
+}
+
+function _setLocBtnPending(pending){
+  const btn = document.querySelector('#locPrompt .btn-pri');
+  if(!btn) return;
+  btn.disabled = pending;
+  btn.textContent = pending ? '위치 가져오는 중…' : '📍 위치 허용하고 시작하기';
+}
+
 function demoLoc(){ LOC={lat:37.5172,lng:127.0473}; boot(); }
 
 function boot(){
@@ -858,6 +1052,7 @@ function boot(){
   document.getElementById('hdr').style.display='flex';
   document.getElementById('tbar').classList.add('on');
   document.getElementById('rBtn').style.display='flex';
+  ensureDemoPosts();   // seed demo posts if storage was wiped
   updateLocTxt();
   renderEvtBanner();
   renderFeed();
@@ -878,6 +1073,12 @@ function dist(la1,lo1,la2,lo2){
 }
 function fmtDist(m){ return m<1000?Math.round(m)+'m':(m/1000).toFixed(1)+'km' }
 function fmtR(r){ return r>=99999?'전체':r>=1000?(r/1000)+'km':r+'m' }
+function fmtCount(n){ return n>=10000?(n/10000).toFixed(1).replace(/\.0$/,'')+'만':n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'k':String(n); }
+function fakeFollowStats(uid){
+  let h=0; for(let i=0;i<uid.length;i++) h=Math.imul(h,31)+uid.charCodeAt(i)|0;
+  h=Math.abs(h);
+  return {followers:50+(h%450), following:20+((h>>>5)%250)};
+}
 function fmtTime(ts){
   const d=Date.now()-ts, m=Math.floor(d/60000);
   if(m<1)return '방금 전';
@@ -906,6 +1107,8 @@ function goTab(tab, _pushHist=true){
   document.getElementById('hdrTitle').textContent=HDR_TITLES[tab]||'PinSpot';
   const rBtn=document.getElementById('rBtn');
   rBtn.style.display=(tab==='home')?'flex':'none';
+  const sBtn=document.getElementById('settingsBtn');
+  if(sBtn) sBtn.style.display=(tab==='profile')?'flex':'none';
   const cv=document.getElementById('chatView');
   if(cv&&cv.classList.contains('open')&&tab!=='messages') cv.classList.remove('open');
   if(tab==='map'){ setTimeout(()=>initMap(),80); }
@@ -913,7 +1116,7 @@ function goTab(tab, _pushHist=true){
   if(tab==='notifications'){ renderNotifs(); markRead(); updateNtfBadge(); }
   if(tab==='search'){ renderSearchPosts(); }
   if(tab==='messages'){ renderMessages(); }
-  if(tab==='profile') renderProfile();
+  if(tab==='profile'){ renderProfile(); setTimeout(()=>{ if(profMapObj) profMapObj.relayout(); },120); }
   if(tab==='post'){ setAvatar(document.getElementById('pfAv'),ME); document.getElementById('pfName').textContent=ME.name; updateLocTxt(); }
 }
 
@@ -963,11 +1166,14 @@ function mkCard(p){
   const own=p.uid===ME.id;
   el.innerHTML=`
     <div class="pc-head">
-      <div class="av m ${p.col}">${ini(p.uname)}</div>
-      <div class="pc-meta">
-        <div class="pc-name">${esc(p.uname)}${own?' <span style="font-size:10px;color:var(--primary);font-weight:700">나</span>':''}</div>
-        <div class="pc-sub"><span class="dist">📍${fmtDist(d)}</span><span>${fmtTime(p.ts)}</span></div>
+      <div class="pc-user" onclick="openUserProf('${p.uid}')">
+        <div class="av m ${p.col}">${ini(p.uname)}</div>
+        <div class="pc-meta">
+          <div class="pc-name">${esc(p.uname)}${own?' <span style="font-size:10px;color:var(--primary);font-weight:700">나</span>':''}</div>
+          <div class="pc-sub"><span class="dist">📍${fmtDist(d)}</span><span>${fmtTime(p.ts)}</span></div>
+        </div>
       </div>
+      <button class="pc-map-btn" onclick="showOnMap(${p.lat},${p.lng})" title="지도에서 보기">🗺️</button>
       ${own?`<button class="more-btn" onclick="delPost('${p.id}')">⋯</button>`:''}
     </div>
     ${p.txt?`<div class="pc-body">${esc(p.txt)}</div>`:''}
@@ -979,7 +1185,6 @@ function mkCard(p){
       <button class="act-btn" onclick="openCmt('${p.id}')">
         <span class="i">💬</span><span>${(p.cmts||[]).length}</span>
       </button>
-      <span class="map-ref" onclick="showOnMap(${p.lat},${p.lng})">🗺️ 지도</span>
     </div>`;
   return el;
 }
@@ -1181,14 +1386,39 @@ function openDetail(id){
 // ═══════════════════════════════════════════════
 function renderProfile(){
   if(!ME) return;
-  setAvatar(document.getElementById('profAv'),ME,'l');
+  setAvatar(document.getElementById('profAv'),ME,'m');
   document.getElementById('profName').textContent=ME.name;
   document.getElementById('profId').textContent='@'+ME.id.replace('u_','user');
-  const posts=S.posts(), mine=posts.filter(p=>p.uid===ME.id);
+  const posts=S.posts(), mine=posts.filter(p=>p.uid===ME.id).sort((a,b)=>b.ts-a.ts);
   document.getElementById('stP').textContent=mine.length;
-  document.getElementById('stL').textContent=mine.reduce((s,p)=>s+(p.likes||0),0);
-  document.getElementById('stC').textContent=mine.reduce((s,p)=>s+(p.cmts||[]).length,0);
-  document.getElementById('settR').textContent=fmtR(RADIUS);
+  const{followers:meFr,following:meFg}=fakeFollowStats(ME.id);
+  document.getElementById('stFr').textContent=fmtCount(meFr);
+  document.getElementById('stFg').textContent=fmtCount(meFg+_uprofFollowed.size);
+  const settREl=document.getElementById('settR');
+  if(settREl) settREl.textContent=fmtR(RADIUS);
+  renderProfTimeline(mine);
+  initProfMap(mine);
+}
+
+function renderProfTimeline(mine){
+  const tl=document.getElementById('profTimeline');
+  if(!tl) return;
+  if(!mine.length){
+    tl.innerHTML='<div class="empty"><div class="ei">📌</div><h4>아직 게시물이 없어요</h4><p>첫 게시물을 올려보세요!</p></div>';
+    _teardownProfTimelineScrollSpy();
+    return;
+  }
+  tl.innerHTML='';
+  mine.forEach(p=>{
+    const wrapper=document.createElement('div');
+    wrapper.onclick=(e)=>{ if(!e.target.closest('button')){ openDetail(p.id); highlightProfPin(p.id); } };
+    wrapper.appendChild(mkCard(p));
+    tl.appendChild(wrapper);
+  });
+  _setupProfTimelineScrollSpy();
+}
+
+function renderProfGrid(mine){
   const grid=document.getElementById('pgrid'); grid.innerHTML='';
   if(!mine.length){
     const el=document.createElement('div');
@@ -1196,14 +1426,185 @@ function renderProfile(){
     el.innerHTML='<div style="font-size:32px;margin-bottom:8px">📌</div>아직 게시물이 없어요.<br>첫 게시물을 올려보세요!';
     grid.appendChild(el); return;
   }
-  mine.sort((a,b)=>b.ts-a.ts).forEach(p=>{
+  mine.forEach(p=>{
     const el=document.createElement('div');
-    el.className='pgrid-item'; el.onclick=()=>openDetail(p.id);
+    el.className='pgrid-item';
+    el.id='pgi-'+p.id;
+    el.onclick=()=>{ openDetail(p.id); highlightProfPin(p.id); };
     if(p.img) el.innerHTML=`<img src="${p.img}" alt="">`;
     else el.innerHTML=`<div class="pgrid-ph"><span style="font-size:22px">📝</span><span>${esc((p.txt||'').slice(0,24))}${(p.txt||'').length>24?'…':''}</span></div>`;
     grid.appendChild(el);
   });
 }
+
+function switchProfTab(tab){
+  document.getElementById('ptab-grid').classList.toggle('active',tab==='grid');
+  document.getElementById('ptab-timeline').classList.toggle('active',tab==='timeline');
+  const grid=document.getElementById('pgrid');
+  const tl=document.getElementById('profTimeline');
+  // 지도는 항상 표시
+  if(tab==='grid'){
+    grid.style.display='';
+    tl.style.display='none';
+    _teardownProfTimelineScrollSpy();
+  } else {
+    grid.style.display='none';
+    tl.style.display='block';
+    const mine=S.posts().filter(p=>p.uid===ME.id).sort((a,b)=>b.ts-a.ts);
+    if(!mine.length){
+      tl.innerHTML='<div class="empty"><div class="ei">📌</div><h4>아직 게시물이 없어요</h4><p>첫 게시물을 올려보세요!</p></div>';
+      _teardownProfTimelineScrollSpy();
+    } else {
+      tl.innerHTML='';
+      mine.forEach(p=>{
+        const wrapper=document.createElement('div');
+        wrapper.onclick=(e)=>{ if(!e.target.closest('button')){ openDetail(p.id); highlightProfPin(p.id); } };
+        wrapper.appendChild(mkCard(p));
+        tl.appendChild(wrapper);
+      });
+      _setupProfTimelineScrollSpy();
+    }
+  }
+}
+
+function _profPinHtml(pid, hasImg, active){
+  const bg=active?'#F97316':'#3B82F6';
+  const shadow=active
+    ?'box-shadow:0 0 0 4px rgba(249,115,22,.28),0 3px 12px rgba(0,0,0,.3)'
+    :'box-shadow:0 3px 10px rgba(0,0,0,.25)';
+  return `<div style="position:relative;width:30px;height:38px;cursor:pointer" onclick="openDetail('${pid}')">
+    <div style="width:30px;height:30px;background:${bg};border:2px solid white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;${shadow}">${hasImg?'📷':'📝'}</div>
+    <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid ${bg}"></div>
+  </div>`;
+}
+
+function initProfMap(mine){
+  const el=document.getElementById('profMapEl');
+  if(!el) return;
+  _whenKakao(function(){
+    if(!profMapObj){
+      const c=(mine&&mine.length)?{lat:mine[0].lat,lng:mine[0].lng}:(LOC||{lat:37.5172,lng:127.0473});
+      profMapObj=new kakao.maps.Map(el,{center:kll(c.lat,c.lng),level:7});
+    }
+    profMapMarkers.forEach(m=>m.ov.setMap(null)); profMapMarkers=[];
+    if(LOC){
+      const locOv=kov(LOC.lat,LOC.lng,'<div style="width:10px;height:10px;background:#3B82F6;border:2px solid white;border-radius:50%;box-shadow:0 2px 6px rgba(59,130,246,.4)"></div>',profMapObj,0.5,0.5,5);
+      profMapMarkers.push({ov:locOv,pid:null,lat:LOC.lat,lng:LOC.lng,img:false});
+    }
+    (mine||[]).forEach(p=>{
+      const active=p.id===_profActivePid;
+      const ov=kov(p.lat,p.lng,_profPinHtml(p.id,!!p.img,active),profMapObj,0.5,1,active?5:3);
+      profMapMarkers.push({ov,pid:p.id,lat:p.lat,lng:p.lng,img:!!p.img});
+    });
+    if((mine||[]).length>1){
+      const bounds=new kakao.maps.LatLngBounds();
+      mine.forEach(p=>bounds.extend(kll(p.lat,p.lng)));
+      profMapObj.setBounds(bounds);
+    } else if((mine||[]).length===1){
+      profMapObj.setCenter(kll(mine[0].lat,mine[0].lng)); profMapObj.setLevel(5);
+    }
+    profMapObj.relayout();
+  });
+}
+
+function highlightProfPin(pid){
+  _profActivePid=pid;
+  // 기존 그리드 항목 강조 표시
+  document.querySelectorAll('.pgrid-item').forEach(el=>{
+    const isActive=el.id==='pgi-'+pid;
+    el.style.outline=isActive?'3px solid #F97316':'';
+    el.style.opacity=isActive?'1':'0.75';
+  });
+  // 맵 핀 색상 업데이트
+  profMapMarkers.forEach(m=>{
+    if(!m.pid) return;
+    m.ov.setContent(_profPinHtml(m.pid,m.img,m.pid===pid));
+    m.ov.setZIndex(m.pid===pid?5:3);
+  });
+  // 지도 이동
+  const marker=profMapMarkers.find(m=>m.pid===pid);
+  if(marker&&profMapObj){
+    profMapObj.setCenter(kll(marker.lat,marker.lng));
+    profMapObj.setLevel(4);
+  }
+}
+
+// ── PROFILE TIMELINE SCROLL SPY ────────────────
+// As the user scrolls the timeline, the post sitting just below the sticky
+// map becomes "active": its pin recolors and the map smoothly pans to it.
+// Uses panTo (not setCenter) and skips zoom changes so scrolling stays calm.
+function _setupProfTimelineScrollSpy(){
+  const root=document.getElementById('s-profile');
+  const tl=document.getElementById('profTimeline');
+  if(!root||!tl) return;
+  _teardownProfTimelineScrollSpy();
+  let pending=false;
+  const findActive=()=>{
+    pending=false;
+    if(CURTAB!=='profile') return;
+    const cards=tl.querySelectorAll('.post-card[id^="pc-"]');
+    if(!cards.length) return;
+    // Visible band = bottom of sticky map → top of bottom tab bar.
+    // Live element rects make this accurate at any screen size.
+    const mapEl=document.getElementById('profMapWrap');
+    const tabBar=document.getElementById('tbar');
+    const bandTop=mapEl?mapEl.getBoundingClientRect().bottom:0;
+    const bandBot=tabBar?tabBar.getBoundingClientRect().top:window.innerHeight;
+    const centerY=(bandTop+bandBot)/2;
+    // Pick the card whose center is closest to the band center,
+    // so a post becomes active as soon as it crosses the midline.
+    let pick=null, pickScore=Infinity;
+    for(const c of cards){
+      const r=c.getBoundingClientRect();
+      if(r.bottom<bandTop||r.top>bandBot) continue;
+      const cc=(r.top+r.bottom)/2;
+      const d=Math.abs(cc-centerY);
+      if(d<pickScore){ pickScore=d; pick=c; }
+    }
+    if(!pick){
+      // Fallback: no card overlaps the band yet (e.g. very top of feed)
+      for(const c of cards){
+        const r=c.getBoundingClientRect();
+        const cc=(r.top+r.bottom)/2;
+        const d=Math.abs(cc-centerY);
+        if(d<pickScore){ pickScore=d; pick=c; }
+      }
+    }
+    if(pick){
+      const pid=pick.id.replace(/^pc-/,'');
+      if(pid!==_profActivePid) _scrollHighlightProfPin(pid);
+    }
+  };
+  _profScrollSpyHandler=()=>{
+    if(pending) return;
+    pending=true;
+    requestAnimationFrame(findActive);
+  };
+  root.addEventListener('scroll',_profScrollSpyHandler,{passive:true});
+  // Run once so the first post is highlighted before any scroll happens
+  setTimeout(findActive,80);
+}
+
+function _teardownProfTimelineScrollSpy(){
+  const root=document.getElementById('s-profile');
+  if(_profScrollSpyHandler&&root){
+    root.removeEventListener('scroll',_profScrollSpyHandler);
+  }
+  _profScrollSpyHandler=null;
+}
+
+function _scrollHighlightProfPin(pid){
+  _profActivePid=pid;
+  // Recolor pins only — no zoom change, smooth pan.
+  profMapMarkers.forEach(m=>{
+    if(!m.pid) return;
+    m.ov.setContent(_profPinHtml(m.pid,m.img,m.pid===pid));
+    m.ov.setZIndex(m.pid===pid?5:3);
+  });
+  const marker=profMapMarkers.find(m=>m.pid===pid);
+  if(marker&&profMapObj){ profMapObj.panTo(kll(marker.lat,marker.lng)); }
+}
+
 function openEditProf(){
   document.getElementById('epName').value=ME.name;
   setAvatar(document.getElementById('epAv'),ME,'l');
@@ -1295,7 +1696,8 @@ function setRadius(r){
   setTimeout(()=>closeM('radius'), 260);
 }
 function updateRadiusDisplay(){
-  document.getElementById('settR').textContent=fmtR(RADIUS);
+  const settREl=document.getElementById('settR');
+  if(settREl) settREl.textContent=fmtR(RADIUS);
   document.getElementById('mapRBadge').textContent='🎯 '+fmtR(RADIUS)+' 이내';
 }
 
@@ -1371,7 +1773,19 @@ function refreshMapPins(){
 
 function openPostFromMap(id){ if(!mapPinMode) openDetail(id); }
 function centerMap(){ if(mapObj&&LOC){mapObj.setCenter(kll(LOC.lat,LOC.lng));mapObj.setLevel(3);} }
-function showOnMap(la,lo){ goTab('map'); setTimeout(()=>{ if(mapObj){mapObj.setCenter(kll(la,lo));mapObj.setLevel(2);} },200); }
+let _mapNavPending=null;
+function showOnMap(la,lo){
+  if(document.querySelector('.overlay.on')){
+    _mapNavPending={la,lo};
+    history.back();
+    return;
+  }
+  _execShowOnMap(la,lo);
+}
+function _execShowOnMap(la,lo){
+  goTab('map');
+  setTimeout(()=>{ if(mapObj){mapObj.setCenter(kll(la,lo));mapObj.setLevel(2);} },200);
+}
 
 // ── MAP FEED PIN MODE ──────────────────────────
 function toggleMapPinMode(){
@@ -1639,8 +2053,14 @@ function openEvtOnMap(){
 // ═══════════════════════════════════════════════
 // DEMO DATA
 // ═══════════════════════════════════════════════
-function addDemo(){
-  if(!LOC) return;
+function addDemo(silent){
+  if(!LOC){ if(!silent) toast('위치 정보가 없어요. 위치를 설정한 후 다시 시도해주세요.'); return; }
+  // Generate posts within current RADIUS so they always appear in feed regardless of location
+  const base=LOC;
+  const spread=Math.min(RADIUS>=99999?2000:RADIUS, 2000);
+  const mLat=spread/111000;
+  const mLng=spread/(111000*Math.cos(base.lat*Math.PI/180));
+  function rOff(s){ return (Math.random()*0.5+0.2)*s*(Math.random()<0.5?1:-1); }
   const users=[
     {id:'d1',name:'김민준',col:'c0'},{id:'d2',name:'이서연',col:'c4'},
     {id:'d3',name:'박지호',col:'c2'},{id:'d4',name:'최수아',col:'c1'},
@@ -1648,45 +2068,84 @@ function addDemo(){
     {id:'d7',name:'오세훈',col:'c5'},
   ];
   const demos=[
-    {u:users[0],txt:'오늘 날씨 진짜 좋네요! ☀️ 강남 공원 산책하는데 여기 오시는 분 있나요?',lat:37.4979,lng:127.0276},
-    {u:users[1],txt:'홍대 숨은 카페 발견!! ☕ 아메리카노 3,500원에 뷰도 최고예요 🎨',lat:37.5563,lng:126.9224},
-    {u:users[2],txt:'신촌 근처 점심 맛집 추천해주세요 🍜 돌아다녀봤는데 너무 고르기 어렵네요',lat:37.5596,lng:126.9368},
-    {u:users[3],txt:'잠실 석촌호수 저녁 노을이 진짜 장난 아닌데요 🌇 지금 여기 오셔야 해요!!',lat:37.5133,lng:127.1028},
-    {u:users[4],txt:'이태원에서 길고양이 발견했는데 집사님 계신가요? 🐱 되게 순하고 건강해 보여요',lat:37.5340,lng:126.9947},
-    {u:users[5],txt:'광화문 광장에서 오늘 플리마켓 해요! 오전 11시~오후 5시 🛍️ 핸드메이드 소품 많아요',lat:37.5759,lng:126.9768},
-    {u:users[6],txt:'성수동 팝업스토어 줄이 엄청 길어요 😱 지나가시는 분들 참고하세요!',lat:37.5448,lng:127.0557},
+    {u:users[0],txt:'오늘 날씨 진짜 좋네요! ☀️ 강남 공원 산책하는데 여기 오시는 분 있나요?'},
+    {u:users[1],txt:'홍대 숨은 카페 발견!! ☕ 아메리카노 3,500원에 뷰도 최고예요 🎨'},
+    {u:users[2],txt:'신촌 근처 점심 맛집 추천해주세요 🍜 돌아다녀봤는데 너무 고르기 어렵네요'},
+    {u:users[3],txt:'잠실 석촌호수 저녁 노을이 진짜 장난 아닌데요 🌇 지금 여기 오셔야 해요!!'},
+    {u:users[4],txt:'이태원에서 길고양이 발견했는데 집사님 계신가요? 🐱 되게 순하고 건강해 보여요'},
+    {u:users[5],txt:'광화문 광장에서 오늘 플리마켓 해요! 오전 11시~오후 5시 🛍️ 핸드메이드 소품 많아요'},
+    {u:users[6],txt:'성수동 팝업스토어 줄이 엄청 길어요 😱 지나가시는 분들 참고하세요!'},
   ];
-  const posts=S.posts(); const now=Date.now();
+  const demoUids=new Set(['d1','d2','d3','d4','d5','d6','d7']);
+  // 기존 데모 게시물 + 내 계정 데모 게시물 모두 교체
+  let posts=S.posts().filter(p=>!demoUids.has(p.uid)&&!p._meDemo);
+  const now=Date.now();
   let added=0;
   demos.forEach((d,i)=>{
-    if(posts.some(p=>p.uid===d.u.id&&p.txt===d.txt)) return;
     posts.push({
       id:uid(), uid:d.u.id, uname:d.u.name, col:d.u.col,
-      txt:d.txt, img:null,
-      lat:d.lat, lng:d.lng,
+      txt:d.txt, img:`https://picsum.photos/seed/ps${i+1}/600/400`,
+      lat:base.lat+rOff(mLat), lng:base.lng+rOff(mLng),
       ts:now-(i*900000+Math.random()*300000),
       likes:Math.floor(Math.random()*25), likedBy:[], cmts:[]
     });
     added++;
   });
-  // Add sample comments
-  const myPosts=posts.filter(p=>p.uid===ME.id);
-  if(myPosts.length){
-    const mp=myPosts[0];
-    if(!(mp.cmts||[]).find(c=>c.uid==='d1')){
-      if(!mp.cmts) mp.cmts=[];
-      mp.cmts.push({id:uid(),uid:'d1',uname:'김민준',col:'c0',txt:'오, 좋은 게시물이네요! 👍',ts:now-600000,read:false});
-      const ns=S.notifs();
-      ns.unshift({id:uid(),pid:mp.id,from:'김민준',txt:'오, 좋은 게시물이네요! 👍',ts:now-600000,read:false});
-      S.setNotifs(ns);
-      updateNtfBadge();
-    }
+
+  // 내 계정(ME) 데모 게시물 10개 — 서울 주요 지역 고정 좌표
+  const meDemos=[
+    {lat:37.4979,lng:127.0276, img:'https://picsum.photos/seed/ps8/600/400',  txt:'강남역 근처 고기집 드디어 웨이팅 성공 🍖 줄 30분 서서 들어갔는데 진짜 기다릴 만한 맛이었음', ts:now-1*3600000},
+    {lat:37.5447,lng:127.0559, img:'https://picsum.photos/seed/ps9/600/400',  txt:'성수동 카페 투어 중 ☕ 오늘만 세 번째 커피인데 멈출 수가 없는 이 동네 분위기', ts:now-5*3600000},
+    {lat:37.4921,lng:126.7237, img:'https://picsum.photos/seed/ps10/600/400', txt:'부평 갈비 거리에서 저녁 먹고 왔는데 진짜 양이 어마어마하다 🥩 다 못 먹고 포장했음', ts:now-26*3600000},
+    {lat:37.5563,lng:126.9227, img:'https://picsum.photos/seed/ps11/600/400', txt:'홍대 버스킹 구경하다 두 시간 훌쩍 😮 노래 진짜 잘하는 분 있어서 자꾸 발이 안 떨어지더라고요 🎸', ts:now-50*3600000},
+    {lat:37.5133,lng:127.1001, img:'https://picsum.photos/seed/ps12/600/400', txt:'잠실 석촌호수 한 바퀴 🌿 오리 가족이 줄지어 지나가는데 너무 귀여워서 멈춰서 한참 봤음', ts:now-74*3600000},
+    {lat:37.5340,lng:126.9947, img:'https://picsum.photos/seed/ps13/600/400', txt:'이태원 경리단길 올라가다 낯선 골목 발견 🛤️ 처음 온 곳인데 왜 이렇게 정겨운지 모르겠다', ts:now-98*3600000},
+    {lat:37.5752,lng:126.9768, img:'https://picsum.photos/seed/ps14/600/400', txt:'광화문 퇴근길에 세종대왕 동상 앞에서 잠깐 쉬어갔음 👑 평일 저녁인데도 사람이 진짜 많더라', ts:now-122*3600000},
+    {lat:37.5596,lng:126.9370, img:null,                                       txt:'신촌 포차 골목에서 친구들이랑 삼겹살 한 판 🍺 오늘 하루 다 풀리는 느낌이었음', ts:now-146*3600000},
+    {lat:37.5623,lng:126.9263, img:'https://picsum.photos/seed/ps16/600/400', txt:'연남동 조용한 카페에서 혼자 책 읽다가 두 시간 훌쩍 🌸 커피도 맛있고 후회 없음', ts:now-170*3600000},
+    {lat:37.5283,lng:126.9340, img:'https://picsum.photos/seed/ps17/600/400', txt:'여의도 한강공원 자전거 한 바퀴 🚴 오늘 날씨 완전 딱이다 한강변 사람 많아서 활기찼음', ts:now-194*3600000},
+  ];
+  meDemos.forEach(d=>{
+    posts.push({
+      id:uid(), uid:ME.id, uname:ME.name, col:ME.col,
+      txt:d.txt, img:d.img,
+      lat:d.lat+(Math.random()-.5)*0.003, lng:d.lng+(Math.random()-.5)*0.003,
+      ts:d.ts,
+      likes:Math.floor(Math.random()*18)+2, likedBy:[], cmts:[],
+      _meDemo:true
+    });
+    added++;
+  });
+
+  // 첫 번째 내 게시물에 샘플 댓글 추가
+  const myNew=posts.filter(p=>p.uid===ME.id&&p._meDemo);
+  if(myNew.length){
+    const mp=myNew[0];
+    if(!mp.cmts) mp.cmts=[];
+    mp.cmts.push({id:uid(),uid:'d2',uname:'이서연',col:'c4',txt:'맞아요 거기 진짜 맛있어요! 저도 자주 가요 😊',ts:now-3500000});
+    const ns=S.notifs();
+    ns.unshift({id:uid(),pid:mp.id,from:'이서연',txt:'맞아요 거기 진짜 맛있어요! 저도 자주 가요 😊',ts:now-3500000,read:false});
+    S.setNotifs(ns);
+    updateNtfBadge();
   }
+
   S.setPosts(posts);
   renderFeed(); renderProfile();
   if(mapReady) refreshMapPins();
-  toast(`데모 게시물 ${added}개 추가됐어요! ✨`);
+  if(!silent) toast(`데모 게시물 ${added}개 추가됐어요! ✨`);
 }
+
+// Auto-seed demo posts on every entry so they survive localStorage wipes
+// (private mode, ngrok domain rotation, manual data clear, etc.).
+// Only seeds when no demo content exists — never wipes user interactions.
+function ensureDemoPosts(){
+  const posts=S.posts();
+  const demoUids=new Set(['d1','d2','d3','d4','d5','d6','d7']);
+  const hasAnyDemo=posts.some(p=>demoUids.has(p.uid)||p._meDemo);
+  if(hasAnyDemo) return;
+  addDemo(true);  // silent seed
+}
+
 function clearAll(){
   if(!confirm('모든 게시물과 알림을 삭제할까요?')) return;
   localStorage.removeItem('ps_posts'); localStorage.removeItem('ps_notifs');
@@ -1694,6 +2153,228 @@ function clearAll(){
   if(mapReady) refreshMapPins();
   toast('데이터가 초기화됐어요.');
 }
+
+// ═══════════════════════════════════════════════
+// SETTINGS MODAL
+// ═══════════════════════════════════════════════
+function openSettingsModal(){
+  const settREl=document.getElementById('settR');
+  if(settREl) settREl.textContent=fmtR(RADIUS);
+  openM('settings');
+}
+
+// ═══════════════════════════════════════════════
+// EVENTS FULL SCREEN
+// ═══════════════════════════════════════════════
+function openEvtFull(){
+  const list=document.getElementById('evtFullList');
+  list.innerHTML=EVENTS.map(ev=>{
+    const d=LOC?Math.round(dist(LOC.lat,LOC.lng,ev.lat,ev.lng)):null;
+    const ddayStr=ev.dday<=0?'진행중':ev.dday===1?'D-1':`D-${ev.dday}`;
+    return `<div class="evtf-card" style="background:${ev.grad}" onclick="openEvtDetail('${ev.id}')">
+      ${d!=null?`<div class="evtf-dist">📍 ${fmtDist(d)}</div>`:''}
+      <div class="evtf-dday">${ddayStr}</div>
+      <div class="evtf-body">
+        <div class="evtf-emoji">${ev.emoji}</div>
+        <div class="evtf-title">${esc(ev.title)}</div>
+        <div class="evtf-meta"><span>📍 ${esc(ev.place)}</span><span>📅 ${esc(ev.date)}</span></div>
+        <div style="font-size:12px;color:rgba(255,255,255,.72);margin-top:8px;line-height:1.55">${esc((ev.desc||'').slice(0,90))}${(ev.desc||'').length>90?'…':''}</div>
+      </div>
+    </div>`;
+  }).join('');
+  const el=document.getElementById('evtFull');
+  el.classList.add('open'); el.scrollTop=0;
+  _pushHistory({type:'evtFull'});
+}
+
+function closeEvtFull(){
+  document.getElementById('evtFull').classList.remove('open');
+}
+
+// ═══════════════════════════════════════════════
+// FOLLOW LIST
+// ═══════════════════════════════════════════════
+const _DEMO_USERS=[
+  {id:'d1',name:'김민준',col:'c0'},{id:'d2',name:'이서연',col:'c4'},
+  {id:'d3',name:'박지호',col:'c2'},{id:'d4',name:'최수아',col:'c1'},
+  {id:'d5',name:'정태양',col:'c3'},{id:'d6',name:'한가영',col:'c6'},
+  {id:'d7',name:'오세훈',col:'c5'},
+];
+function openMeFollowList(type){ openFollowList(ME.id,type); }
+function openUprofFollowList(type){ if(_curUserProf) openFollowList(_curUserProf.uid,type); }
+function openFollowList(uid,type){
+  const isFollowers=type==='followers';
+  const {followers,following}=fakeFollowStats(uid);
+  const meFollows=uid!==ME.id&&_uprofFollowed.has(uid);
+  const total=(isFollowers?followers+(meFollows?1:0):following+(uid===ME.id?_uprofFollowed.size:0));
+  document.getElementById('flTitle').textContent=(isFollowers?'팔로워':'팔로잉')+' '+fmtCount(total)+'명';
+  let list=[];
+  if(isFollowers&&meFollows) list.push({id:ME.id,name:ME.name,col:ME.col,isMe:true});
+  if(!isFollowers&&uid===ME.id){
+    _uprofFollowed.forEach(fid=>{
+      const p=S.posts().find(x=>x.uid===fid);
+      if(p&&!list.find(l=>l.id===fid)) list.push({id:fid,name:p.uname,col:p.col});
+    });
+  }
+  let h=0; for(let i=0;i<uid.length+type.length;i++) h=Math.imul(h,37)+(uid+type).charCodeAt(i)|0; h=Math.abs(h);
+  const shuffled=[..._DEMO_USERS].filter(u=>u.id!==uid).sort((a,b)=>((h^a.id.charCodeAt(1)*7919)&0xffff)-((h^b.id.charCodeAt(1)*7919)&0xffff));
+  shuffled.forEach(u=>{ if(!list.find(l=>l.id===u.id)) list.push(u); });
+  document.getElementById('flList').innerHTML=list.slice(0,8).map(u=>`
+    <div class="fl-item" onclick="${u.isMe?`history.back();setTimeout(()=>goTab('profile'),50)`:`openUserProf('${u.id}')`}">
+      <div class="av m ${u.col}">${ini(u.name)}</div>
+      <div class="fl-info">
+        <div class="fl-name">${esc(u.name)}${u.isMe?' <span style="font-size:10px;color:var(--primary);font-weight:700">나</span>':''}</div>
+        <div class="fl-id">@${u.id}</div>
+      </div>
+    </div>`).join('');
+  openM('follow-list');
+}
+
+// ═══════════════════════════════════════════════
+// USER PROFILE PANEL
+// ═══════════════════════════════════════════════
+let _curUserProf=null;
+let uprofMapObj=null, uprofMapMarkers=[], _uprofActivePid=null;
+const _uprofFollowed=new Set();
+
+function openUserProf(uid){
+  if(uid===ME.id){ goTab('profile'); return; }
+  const posts=S.posts().filter(p=>p.uid===uid).sort((a,b)=>b.ts-a.ts);
+  if(!posts.length){ toast('이 사용자의 게시물이 없어요.'); return; }
+  const u=posts[0];
+  _curUserProf={uid,uname:u.uname,col:u.col};
+
+  document.getElementById('uprofHdrName').textContent=u.uname;
+  setAvatar(document.getElementById('uprofAv'),{name:u.uname,col:u.col},'m');
+  document.getElementById('uprofName').textContent=u.uname;
+  document.getElementById('uprofId').textContent='@'+uid;
+  document.getElementById('upStP').textContent=posts.length;
+  const{followers:uFr,following:uFg}=fakeFollowStats(uid);
+  document.getElementById('upStFr').textContent=fmtCount(uFr+(_uprofFollowed.has(uid)?1:0));
+  document.getElementById('upStFg').textContent=fmtCount(uFg);
+
+  const isFollowing=_uprofFollowed.has(uid);
+  const btn=document.getElementById('uprofFollowBtn');
+  btn.textContent=isFollowing?'팔로잉':'팔로우';
+  btn.className='follow-btn'+(isFollowing?' following':'');
+
+  _uprofActivePid=null;
+  document.getElementById('uptab-grid').classList.add('active');
+  document.getElementById('uptab-timeline').classList.remove('active');
+  switchUprofTab('grid',posts);
+
+  const el=document.getElementById('userProf');
+  el.classList.add('open'); el.scrollTop=0;
+  _pushHistory({type:'userProf'});
+  setTimeout(()=>initUprofMap(posts),340);
+}
+
+function switchUprofTab(tab,postsArg){
+  document.getElementById('uptab-grid').classList.toggle('active',tab==='grid');
+  document.getElementById('uptab-timeline').classList.toggle('active',tab==='timeline');
+  const grid=document.getElementById('uprofGrid');
+  const tl=document.getElementById('uprofTimeline');
+  const posts=postsArg||(S.posts().filter(p=>p.uid===(_curUserProf&&_curUserProf.uid)).sort((a,b)=>b.ts-a.ts));
+  if(tab==='grid'){
+    grid.style.display=''; tl.style.display='none';
+    grid.innerHTML='';
+    posts.forEach(p=>{
+      const el=document.createElement('div');
+      el.className='pgrid-item'; el.id='upgi-'+p.id;
+      el.onclick=()=>{ openDetail(p.id); highlightUprofPin(p.id); };
+      if(p.img) el.innerHTML=`<img src="${p.img}" alt="">`;
+      else el.innerHTML=`<div class="pgrid-ph"><span style="font-size:22px">📝</span><span>${esc((p.txt||'').slice(0,24))}${(p.txt||'').length>24?'…':''}</span></div>`;
+      grid.appendChild(el);
+    });
+  } else {
+    grid.style.display='none'; tl.style.display='block';
+    if(!posts.length){
+      tl.innerHTML='<div class="empty"><div class="ei">📌</div><h4>게시물이 없어요</h4></div>';
+    } else {
+      tl.innerHTML='';
+      posts.forEach(p=>{
+        const wrapper=document.createElement('div');
+        wrapper.onclick=(e)=>{ if(!e.target.closest('button')){ openDetail(p.id); highlightUprofPin(p.id); } };
+        wrapper.appendChild(mkCard(p));
+        tl.appendChild(wrapper);
+      });
+    }
+  }
+}
+
+function initUprofMap(posts){
+  const el=document.getElementById('uprofMapEl');
+  if(!el) return;
+  _whenKakao(function(){
+    if(!uprofMapObj){
+      const c=(posts&&posts.length)?{lat:posts[0].lat,lng:posts[0].lng}:(LOC||{lat:37.5172,lng:127.0473});
+      uprofMapObj=new kakao.maps.Map(el,{center:kll(c.lat,c.lng),level:7});
+    }
+    uprofMapMarkers.forEach(m=>m.ov.setMap(null)); uprofMapMarkers=[];
+    (posts||[]).forEach(p=>{
+      const active=p.id===_uprofActivePid;
+      const ov=kov(p.lat,p.lng,_profPinHtml(p.id,!!p.img,active),uprofMapObj,0.5,1,active?5:3);
+      uprofMapMarkers.push({ov,pid:p.id,lat:p.lat,lng:p.lng,img:!!p.img});
+    });
+    if((posts||[]).length>1){
+      const bounds=new kakao.maps.LatLngBounds();
+      posts.forEach(p=>bounds.extend(kll(p.lat,p.lng)));
+      uprofMapObj.setBounds(bounds);
+    } else if((posts||[]).length===1){
+      uprofMapObj.setCenter(kll(posts[0].lat,posts[0].lng)); uprofMapObj.setLevel(5);
+    }
+    uprofMapObj.relayout();
+  });
+}
+
+function highlightUprofPin(pid){
+  _uprofActivePid=pid;
+  document.querySelectorAll('#uprofGrid .pgrid-item').forEach(el=>{
+    const isActive=el.id==='upgi-'+pid;
+    el.style.outline=isActive?'3px solid #F97316':'';
+    el.style.opacity=isActive?'1':'0.75';
+  });
+  uprofMapMarkers.forEach(m=>{
+    if(!m.pid) return;
+    m.ov.setContent(_profPinHtml(m.pid,m.img,m.pid===pid));
+    m.ov.setZIndex(m.pid===pid?5:3);
+  });
+  const marker=uprofMapMarkers.find(m=>m.pid===pid);
+  if(marker&&uprofMapObj){
+    uprofMapObj.setCenter(kll(marker.lat,marker.lng));
+    uprofMapObj.setLevel(4);
+  }
+}
+
+function toggleFollow(){
+  if(!_curUserProf) return;
+  const uid=_curUserProf.uid;
+  const wasFollowing=_uprofFollowed.has(uid);
+  if(wasFollowing) _uprofFollowed.delete(uid); else _uprofFollowed.add(uid);
+  const btn=document.getElementById('uprofFollowBtn');
+  btn.textContent=wasFollowing?'팔로우':'팔로잉';
+  btn.className='follow-btn'+(wasFollowing?'':' following');
+  // 팔로워 수 반영
+  const{followers:uFr}=fakeFollowStats(uid);
+  document.getElementById('upStFr').textContent=fmtCount(uFr+(_uprofFollowed.has(uid)?1:0));
+  // ME 팔로잉 수 반영
+  const{following:meFg}=fakeFollowStats(ME.id);
+  const stFgEl=document.getElementById('stFg');
+  if(stFgEl) stFgEl.textContent=fmtCount(meFg+_uprofFollowed.size);
+  toast(wasFollowing?'팔로우를 취소했어요.':`${_curUserProf.uname} 님을 팔로우했어요! 🎉`);
+}
+
+function closeUserProf(){
+  document.getElementById('userProf').classList.remove('open');
+  _curUserProf=null;
+  uprofMapMarkers.forEach(m=>m.ov.setMap(null)); uprofMapMarkers=[];
+  _uprofActivePid=null;
+}
+function openDMFromProf(){
+  if(!_curUserProf) return;
+  openDM(_curUserProf.uid, _curUserProf.uname, _curUserProf.col);
+}
+
 function delPost(id){
   if(!confirm('게시물을 삭제할까요?')) return;
   S.setPosts(S.posts().filter(p=>p.id!==id));
@@ -1934,6 +2615,10 @@ window.addEventListener('popstate', e=>{
     else closeM(entry.id);
   } else if(entry.type==='evtDetail'){
     closeEvtDetail();
+  } else if(entry.type==='evtFull'){
+    closeEvtFull();
+  } else if(entry.type==='userProf'){
+    closeUserProf();
   } else if(entry.type==='chatView'){
     closeDM();
   } else if(entry.type==='imgViewer'){
@@ -1941,7 +2626,10 @@ window.addEventListener('popstate', e=>{
   } else if(entry.type==='tab'){
     goTab(entry.tab, false);
   }
-  setTimeout(()=>{ _poppingHistory=false; },0);
+  setTimeout(()=>{
+    _poppingHistory=false;
+    if(_mapNavPending){ const nav=_mapNavPending; _mapNavPending=null; _execShowOnMap(nav.la,nav.lo); }
+  },0);
 });
 </script>
 </body>
