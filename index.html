@@ -579,6 +579,9 @@ textarea.pta:focus{border-color:var(--primary)}
 .empty .ei{font-size:56px;margin-bottom:14px}
 .empty h4{font-size:17px;font-weight:700;margin-bottom:7px}
 .empty p{font-size:13px;color:var(--text2);line-height:1.6}
+/* 빈 목록에서 바로 취할 수 있는 행동(반경 넓히기 등) */
+.empty-act{margin-top:18px;padding:11px 20px;background:var(--grad);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px var(--sunset-sh);transition:transform .15s}
+.empty-act:active{transform:scale(.96)}
 
 /* ── LOADING ── */
 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;gap:12px;color:var(--text2);font-size:13px}
@@ -715,8 +718,11 @@ textarea.pta:focus{border-color:var(--primary)}
 .evt-place{font-size:10px;color:rgba(255,255,255,.82);margin-top:5px;display:flex;align-items:center;gap:2px}
 .evt-date{font-size:10px;color:rgba(255,255,255,.72);margin-top:3px}
 .evt-dist{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.22);color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:8px;backdrop-filter:blur(4px)}
-.evt-dday{position:absolute;bottom:10px;right:10px;background:rgba(255,255,255,.22);color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:8px;z-index:2}
-.evt-dday.live{background:#EF4444;color:#fff;box-shadow:0 2px 8px rgba(239,68,68,.5)}
+.evt-dday{position:absolute;bottom:10px;right:10px;background:rgba(255,255,255,.22);color:#fff;font-size:10px;font-weight:800;padding:3px 8px;border-radius:8px;z-index:2;white-space:nowrap;max-width:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis}
+/* 진행 중 = 초록, 종료 임박(오늘·내일 종료) = 빨강. 빨강은 '지금 안 가면 놓친다'는 뜻으로만 쓴다. */
+.evt-dday.live{background:#10B981;color:#fff;box-shadow:0 2px 8px rgba(16,185,129,.45)}
+.evt-dday.urgent{background:#EF4444;color:#fff;box-shadow:0 2px 8px rgba(239,68,68,.55);animation:ddayPulse 1.8s ease-in-out infinite}
+@keyframes ddayPulse{0%,100%{opacity:1}50%{opacity:.7}}
 /* 축제 카드 실제 이미지 배경 + 가독성 스크림 */
 .evt-card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
 .evt-card-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1) 25%,rgba(0,0,0,.62));z-index:1}
@@ -729,12 +735,14 @@ textarea.pta:focus{border-color:var(--primary)}
 .evt-kind.indoor{color:#2f9256}    /* 실내 = 마커와 같은 초록 */
 .evt-card .evt-kind{position:absolute;top:10px;right:10px;z-index:3}        /* 카드: 비어있는 우상단 코너 */
 .evtf-card .evt-kind{position:relative;z-index:2;align-self:flex-start;margin-bottom:8px}  /* 전체목록: 제목 아래 인라인 */
-.ed-hero-dday.live{background:#EF4444;border-color:#EF4444;color:#fff}
+.ed-hero-dday.live{background:#10B981;border-color:#10B981;color:#fff}
+.ed-hero-dday.urgent{background:#EF4444;border-color:#EF4444;color:#fff}
 .evtf-card-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
 .evtf-card-scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.18),rgba(0,0,0,.66));z-index:1}
 .evtf-card .evtf-body{position:relative;z-index:2}
 .evtf-card .evtf-dist,.evtf-card .evtf-dday{z-index:2}
-.evtf-dday.live{background:#EF4444;color:#fff;border-color:#EF4444}
+.evtf-dday.live{background:#10B981;color:#fff;border-color:#10B981}
+.evtf-dday.urgent{background:#EF4444;color:#fff;border-color:#EF4444;animation:ddayPulse 1.8s ease-in-out infinite}
 .evt-dots{display:flex;justify-content:center;align-items:center;gap:5px;padding:0 0 10px}
 .evt-dot{width:6px;height:6px;border-radius:3px;background:var(--border);transition:all .25s cubic-bezier(.4,0,.2,1);cursor:pointer}
 .evt-dot.active{width:18px;background:var(--primary)}
@@ -1018,7 +1026,7 @@ div:has(> .map-pulse-ring){pointer-events:none}
 .evtf-stats .es{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:800;color:#fff}
 .evtf-stats .ic{width:15px;height:15px;display:block;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .evtf-stats .ic-pin{width:13px;height:15px}
-.evtf-dday{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.22);color:#fff;font-size:12px;font-weight:800;padding:5px 12px;border-radius:10px;border:1.5px solid rgba(255,255,255,.35)}
+.evtf-dday{position:absolute;top:14px;right:14px;white-space:nowrap;background:rgba(255,255,255,.22);color:#fff;font-size:12px;font-weight:800;padding:5px 12px;border-radius:10px;border:1.5px solid rgba(255,255,255,.35)}
 .evtf-dist{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.25);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;backdrop-filter:blur(4px)}
 /* ── USER PROFILE PANEL ── */
 #userProf{position:fixed;top:0;bottom:0;left:max(0px,calc(50vw - 215px));right:max(0px,calc(50vw - 215px));z-index:820;background:var(--bg);transform:translateX(100vw);transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto;-webkit-overflow-scrolling:touch}
@@ -1846,21 +1854,38 @@ function _showKakaoErr(ids, msg){
 
 const COLORS = ['c0','c1','c2','c3','c4','c5','c6','c7'];
 
+// 데모 행사 일정 — 오늘을 기준으로 만든다(고정 날짜면 하루만 지나도 전부 '끝난 축제'가 되어 목록이 빈다).
+//   offStart/offEnd = 오늘로부터 며칠 뒤 시작/종료.
+function _demoSpan(offStart, offEnd){
+  const s=_today0(), e=_today0();
+  s.setDate(s.getDate()+offStart); e.setDate(e.getDate()+offEnd);
+  return {start:s, end:e, dday:offStart,
+          date:`${s.getMonth()+1}.${s.getDate()} – ${e.getMonth()+1}.${e.getDate()}`};
+}
+
 // 공공데이터 로드 실패 / 인증키 미설정 시 사용하는 폴백(데모) 데이터.
 // loadFestivals() 가 성공하면 실제 축제 데이터로 교체됩니다.
 let EVENTS = [
-  {id:'ev1',title:'서울 장미축제',place:'중랑장미공원',date:'5.17 – 26',emoji:'🌹',grad:'linear-gradient(135deg,#F43F5E,#E11D48)',lat:37.5960,lng:127.0845,dday:14,
+  {id:'ev1',title:'서울 장미축제',place:'중랑장미공원',..._demoSpan(-2,1),emoji:'🌹',grad:'linear-gradient(135deg,#F43F5E,#E11D48)',lat:37.5960,lng:127.0845,
    desc:'서울 중랑천 일대에서 펼쳐지는 장미 축제로, 100만 송이의 장미꽃이 만개합니다. 야간 조명 연출, 플리마켓, 버스킹 공연이 함께 열리며 가족 단위 방문객에게 인기 있는 봄 행사입니다.',url:'https://www.jungnang.go.kr'},
-  {id:'ev2',title:'한강 불꽃축제',place:'여의도 한강공원',date:'10.4 예정',emoji:'🎆',grad:'linear-gradient(135deg,#F97316,#EA580C)',lat:37.5284,lng:126.9340,dday:154,
+  {id:'ev2',title:'한강 불꽃축제',place:'여의도 한강공원',..._demoSpan(30,30),emoji:'🎆',grad:'linear-gradient(135deg,#F97316,#EA580C)',lat:37.5284,lng:126.9340,
    desc:'서울의 대표 야경 명소 여의도에서 펼쳐지는 대규모 불꽃 축제입니다. 한강 위로 쏘아 올리는 화려한 불꽃과 함께 다양한 공연이 진행되며, 매년 100만 명 이상이 찾는 서울 최대 야외 행사입니다.',url:'https://www.seoul.go.kr'},
-  {id:'ev3',title:'강남 페스티벌',place:'강남대로 일대',date:'5.24 – 25',emoji:'🎉',grad:'linear-gradient(135deg,#6366F1,#4F46E5)',lat:37.4979,lng:127.0276,dday:21,
+  {id:'ev3',title:'강남 페스티벌',place:'강남대로 일대',..._demoSpan(3,4),emoji:'🎉',grad:'linear-gradient(135deg,#6366F1,#4F46E5)',lat:37.4979,lng:127.0276,
    desc:'강남대로를 중심으로 이틀간 펼쳐지는 거리 축제입니다. K-팝 공연, 푸드 트럭, 패션쇼, 스트리트 아트 전시 등 다채로운 프로그램이 운영됩니다. 강남 최대 규모의 문화 축제로 주목받고 있습니다.',url:'https://www.gangnam.go.kr'},
-  {id:'ev4',title:'북촌 문화제',place:'북촌한옥마을',date:'6.7 – 8',emoji:'🏯',grad:'linear-gradient(135deg,#0EA5E9,#0284C7)',lat:37.5838,lng:126.9836,dday:35,
+  {id:'ev4',title:'북촌 문화제',place:'북촌한옥마을',..._demoSpan(-1,5),emoji:'🏯',grad:'linear-gradient(135deg,#0EA5E9,#0284C7)',lat:37.5838,lng:126.9836,
    desc:'600년 역사를 간직한 북촌한옥마을에서 열리는 전통 문화 행사입니다. 한복 체험, 전통 공예 전시, 국악 공연, 다도 체험 프로그램이 준비되어 있으며, 도심 속 한국 전통 문화를 깊이 체험할 수 있습니다.',url:'https://www.jongno.go.kr'},
 ];
 // 데모 축제 원본(변하지 않는 전체 후보). rankEvents가 반경 필터로 EVENTS를 줄여도,
 // 반경을 다시 넓혔을 때 후보가 사라지지 않도록 항상 이 원본에서 다시 계산한다.
 const _EVENTS_DEMO = EVENTS.slice();
+// ── '가볼 만한 곳/행사' 목록 전용 필터 ──
+// 반경: 게시물 피드의 거리 칩(RADIUS)과 분리해 목록은 항상 '내 위치 5km'에서 시작한다.
+//       결과가 0개일 때 빈 화면의 '반경 넓혀보기' 버튼이 다음 단계로 올린다.
+const EVT_RADIUS_STEPS = [5000, 10000, 20000];   // 최대값은 API 조회 반경(NEARBY_FETCH_RADIUS)과 맞춘다
+let   EVT_RADIUS = EVT_RADIUS_STEPS[0];
+// 기간: 일정이 있는 행사는 '오늘 ~ +7일' 안에서 진행 중이거나 시작하는 것만 노출.
+const EVT_WINDOW_DAYS = 7;
+
 const RADIUS_OPTS = [
   {v:100,  l:'100m', d:'내 바로 근처'},
   {v:500,  l:'500m', d:'도보 7분 이내'},
@@ -1948,15 +1973,55 @@ function _daysUntil(d){
   const t=new Date(); t.setHours(0,0,0,0);
   return Math.round((d-t)/86400000);
 }
+// 오늘 자정 Date(비교 기준). 날짜 계산은 전부 이 자정 기준으로 맞춘다.
+function _today0(){ const t=new Date(); t.setHours(0,0,0,0); return t; }
+
+// 목록 노출 기준 —
+//   · 일정이 있는 행사: 이미 끝났으면 제외, 오늘부터 days일 안에 진행 중이거나 시작하는 것만 통과
+//   · 일정이 없는 상시 장소(관광지·문화시설): 날짜 개념이 없으므로 그대로 통과
+function _evtInWindow(ev, days){
+  const s0=ev&&ev.start, e0=ev&&ev.end;
+  if(!s0 && !e0) return true;
+  const today=_today0();
+  const start=s0||e0, end=e0||s0;
+  if(end < today) return false;                                    // 이미 끝난 행사
+  const limit=new Date(today.getTime() + (days==null?EVT_WINDOW_DAYS:days)*86400000);
+  return start <= limit;                                           // 진행 중이거나 기간 안에 시작
+}
+
+// 카드/상세의 D-day 뱃지 정보 → {text, live, urgent} (일정이 없으면 null = 뱃지 없음)
+//   시작 전   : 'D-3'
+//   진행 중   : '진행중 · 8/30 종료'
+//   종료 임박 : 오늘·내일 종료면 urgent(빨강 강조)
+function _evtDdayInfo(ev){
+  const s0=ev&&ev.start, e0=ev&&ev.end;
+  if(!s0 && !e0) return null;
+  const today=_today0();
+  const start=s0||e0, end=e0||s0;
+  if(end < today) return null;                                     // 끝난 행사(필터에서 걸러지지만 방어)
+  if(start > today){
+    const d=Math.round((start-today)/86400000);
+    return {text:'D-'+d, live:false, urgent:false};
+  }
+  const left=Math.round((end-today)/86400000);                     // 종료까지 남은 일수(0=오늘 종료)
+  return {text:`진행중 · ${end.getMonth()+1}/${end.getDate()} 종료`, live:true, urgent:left<=1};
+}
+// D-day 뱃지 HTML(캐러셀=evt-dday / 목록=evtf-dday / 상세=ed-hero-dday 공용)
+function _ddayBadgeHtml(ev, cls){
+  const info=_evtDdayInfo(ev);
+  if(!info) return '';
+  return `<div class="${cls}${info.live?' live':''}${info.urgent?' urgent':''}">${esc(info.text)}</div>`;
+}
 
 // ── 한국관광공사 TourAPI(searchFestival2) — 진행 중/예정 축제 + firstimage 이미지 ──
-async function fetchTourFestivals(){
-  const today=new Date(); today.setHours(0,0,0,0);
-  // eventStartDate: 진행 중 축제까지 잡히도록 넉넉히 45일 전부터 조회(종료 여부는 클라이언트에서 재필터)
-  const from=new Date(today.getTime()-45*86400000);
+// 이 API에만 행사 일정(eventstartdate/enddate)이 들어 있다. 위치 파라미터가 없어 전국 응답이므로
+// 호출한 쪽에서 반경으로 좁힌다. 응답이 많을 때를 대비해 최대 TOUR_FEST_PAGES 페이지까지 이어 받는다.
+const TOUR_FEST_ROWS  = 1000;
+const TOUR_FEST_PAGES = 2;
+async function _fetchTourFestivalPage(from, pageNo){
   const params=new URLSearchParams({
     serviceKey:FESTIVAL_API_KEY, MobileOS:'ETC', MobileApp:'PinSpot',
-    _type:'json', numOfRows:'300', pageNo:'1', arrange:'R', // R: 생성일+대표이미지 → 이미지 있는 것 우선
+    _type:'json', numOfRows:String(TOUR_FEST_ROWS), pageNo:String(pageNo), arrange:'R', // R: 생성일+대표이미지 → 이미지 있는 것 우선
     eventStartDate:_ymd(from)
   });
   const res=await fetch(`${TOUR_API_URL}?${params.toString()}`);
@@ -1965,9 +2030,23 @@ async function fetchTourFestivals(){
   const head=json&&json.response&&json.response.header;
   const code=head&&head.resultCode;
   if(code && code!=='0000' && code!=='00') throw new Error((head.resultMsg||'TOUR')+' ('+code+')');
-  let items=(json&&json.response&&json.response.body&&json.response.body.items)||[];
+  const body=(json&&json.response&&json.response.body)||{};
+  let items=body.items||[];
   if(items && !Array.isArray(items)) items=items.item||[];
   if(!Array.isArray(items)) items=items?[items]:[];
+  return {items, total:+(body.totalCount||0)};
+}
+async function fetchTourFestivals(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  // eventStartDate: 진행 중 축제까지 잡히도록 넉넉히 45일 전부터 조회(종료 여부는 클라이언트에서 재필터)
+  const from=new Date(today.getTime()-45*86400000);
+  let items=[], total=0;
+  for(let page=1; page<=TOUR_FEST_PAGES; page++){
+    const r=await _fetchTourFestivalPage(from, page);
+    items=items.concat(r.items); total=r.total;
+    if(items.length>=total || r.items.length<TOUR_FEST_ROWS) break;
+  }
+  if(total>items.length) console.info(`[가볼만한곳] 축제 일정 ${items.length}/${total}건만 조회(페이지 상한)`);
   return items.map(it=>({
     title:(it.title||'').trim(),
     place:(it.addr1||it.addr2||'').trim(),
@@ -2102,6 +2181,8 @@ function finalizeEvents(parsed){
       emoji:EVT_EMOJIS[h%EVT_EMOJIS.length],
       grad:EVT_GRADS[h%EVT_GRADS.length],
       lat:e.lat, lng:e.lng,
+      // 시작·종료 Date 원본 — 기간 필터(_evtInWindow)와 D-day 문구(_evtDdayInfo)가 쓴다.
+      start:e.start||null, end:e.end||null,
       // 행사 일정이 있으면 D-day, 없으면(문화시설·관광지 등) null → 카드에서 D-day/일정 숨김
       dday:(e.start||e.end)?_daysUntil(e.start||e.end):null,
       ongoing:(e.start||e.end)?_evtOngoing(e, today):false,
@@ -2170,27 +2251,41 @@ async function loadFestivals(){
   }
   const c = _evtBase() || LOC || {lat:37.5172,lng:127.0473};
   _placesFetching = true;
-  let places=[];
-  try{
-    places = await fetchNearbyPlaces(c.lat, c.lng, NEARBY_FETCH_RADIUS);
-  }catch(err){
-    console.error('[가볼만한곳] 조회 중 예외:', err && err.message);
+  // 위치기반 목록(locationBasedList2)엔 행사 일정이 없다 → 일정이 필요한 축제는
+  // searchFestival2(진행 중/예정 + eventstartdate/enddate)로 따로 받아 함께 병합한다.
+  const [pRes, fRes] = await Promise.allSettled([
+    fetchNearbyPlaces(c.lat, c.lng, NEARBY_FETCH_RADIUS),
+    fetchTourFestivals(),
+  ]);
+  let places=[], fests=[];
+  if(pRes.status==='fulfilled') places=pRes.value;
+  else console.error('[가볼만한곳] 위치기반 조회 중 예외:', (pRes.reason&&pRes.reason.message)||pRes.reason);
+  if(fRes.status==='fulfilled'){
+    // 전국 응답이므로 여기서 조회 반경 안으로 먼저 좁힌다(병합 비용·노이즈 감소).
+    fests=fRes.value.filter(e=>dist(c.lat,c.lng,e.lat,e.lng)<=NEARBY_FETCH_RADIUS);
+    console.info(`[가볼만한곳] 일정 있는 축제 ${fests.length}건(전국 ${fRes.value.length}건 중 ${fmtR(NEARBY_FETCH_RADIUS)} 이내)`);
+  } else {
+    console.error('[가볼만한곳] 축제 일정 조회 실패:', (fRes.reason&&fRes.reason.message)||fRes.reason);
   }
   _placesFetchCenter = {lat:c.lat, lng:c.lng};
 
-  const merged = mergeFestivals(places, []);
-  // 규모 필터: 사진 유무 하드 필터 대신, 사진 없는 곳은 개요 길이로 큰 곳만 선별(비동기 조회).
-  let notable = merged;
-  try{ notable = await _filterNotablePlaces(merged, c); }
+  // 일정 있는 축제를 primary로 둬야 같은 행사가 겹칠 때 '일정 있는 쪽'이 살아남는다.
+  const merged = mergeFestivals(fests, places);
+  // 규모 필터는 상시 장소에만 적용 — 행사는 기간이 짧아 사진·개요가 없어도 목록에 남겨야 한다.
+  const dated   = merged.filter(e=> e.start || e.end);
+  const undated = merged.filter(e=> !e.start && !e.end);
+  let notable = undated;
+  try{ notable = await _filterNotablePlaces(undated, c); }
   catch(err){ console.error('[가볼만한곳] 규모 필터 실패, 원본 사용:', err && err.message); }
+  const finalList = dated.concat(notable);
   _placesFetching = false;
 
-  if(notable.length){
-    _evtSrc = finalizeEvents(notable);
+  if(finalList.length){
+    _evtSrc = finalizeEvents(finalList);
     rankEvents(true);
     addFestivalStoryDemos();   // 실제 가까운 장소 주변에 "이야기" 데모 게시물 심기
     renderFeed();
-    console.info(`[가볼만한곳] 병합 ${_evtSrc.length}곳 표시 (중심 ${c.lat.toFixed(4)},${c.lng.toFixed(4)})`);
+    console.info(`[가볼만한곳] 병합 ${_evtSrc.length}곳(행사 ${dated.length} + 상시 ${notable.length}) (중심 ${c.lat.toFixed(4)},${c.lng.toFixed(4)})`);
   } else {
     console.info('[가볼만한곳] 실데이터 없음 → 데모 데이터 유지');
   }
@@ -2211,19 +2306,21 @@ function _evtBase(){ return FEED_LOC || LOC; }
 // 기준 위치·반경이 안 바뀌었으면(force 아님) 재렌더를 건너뛰어 스크롤 위치를 보존한다.
 function rankEvents(force){
   const base=_evtBase();
-  // 캐시 키에 RADIUS 포함 → 위치가 그대로여도 반경만 바뀌면 다시 필터·정렬한다.
-  const key=(base?base.lat.toFixed(5)+','+base.lng.toFixed(5):'')+'@'+RADIUS;
+  // 캐시 키에 전용 반경 + 오늘 날짜 포함 → 반경을 넓히거나 날짜가 바뀌면 다시 필터·정렬한다.
+  const key=(base?base.lat.toFixed(5)+','+base.lng.toFixed(5):'')+'@'+EVT_RADIUS+'@'+_today0().getTime();
   if(!force && key===_evtBaseKey) return;
   _evtBaseKey=key;
   // 기준 위치가 조회 중심에서 크게 벗어났으면 그 위치 기준으로 다시 조회(비동기).
   if(typeof maybeRefetchPlaces==='function') maybeRefetchPlaces();
   // 전체 후보(실데이터면 _evtSrc, 아니면 데모 원본)에서 시작 — 줄어든 EVENTS를 재사용하지 않음.
   const src=(_evtSrc||_EVENTS_DEMO).slice();
-  // 1) 설정 반경 안의 장소만(기준 위치가 있고 반경이 유한할 때). 반경 무제한이면 전체.
-  let list = (base && RADIUS<99999)
-    ? src.filter(ev=>_validLatLng(ev.lat,ev.lng) && dist(base.lat,base.lng,ev.lat,ev.lng)<=RADIUS)
-    : src;
-  // 2) 가까운 순 정렬(가볼 만한 곳 = 가까운 장소 먼저). 동률이면 임박한 행사(D-day) 먼저.
+  // 1) 좌표가 없거나 이상한 항목은 지도에 찍을 수도, 거리를 잴 수도 없으므로 제외.
+  let list = src.filter(ev=>_validLatLng(ev.lat,ev.lng));
+  // 2) 기준 위치에서 전용 반경(기본 5km) 안만. '반경 넓히기'로 EVT_RADIUS가 커지면 다시 넓어진다.
+  if(base) list = list.filter(ev=>dist(base.lat,base.lng,ev.lat,ev.lng)<=EVT_RADIUS);
+  // 3) 끝난 행사 제외 + 7일 안에 진행 중이거나 시작하는 행사만(일정 없는 상시 장소는 유지).
+  list = list.filter(ev=>_evtInWindow(ev));
+  // 4) 가까운 순 정렬(가볼 만한 곳 = 가까운 장소 먼저). 동률이면 임박한 행사(D-day) 먼저.
   list.sort((a,b)=> (base? dist(base.lat,base.lng,a.lat,a.lng)-dist(base.lat,base.lng,b.lat,b.lng) : 0)
     || ((a.dday??9999)-(b.dday??9999)));
   EVENTS = _evtSrc ? list.slice(0,FESTIVAL_MAX) : list;
@@ -2235,12 +2332,24 @@ function rankEvents(force){
   if(typeof _evtFullSyncIfOpen==='function') _evtFullSyncIfOpen();
 }
 
+// '반경 넓혀보기' — 5km → 10km → 20km. 목록이 0개일 때 빈 화면 버튼에서 호출한다.
+function widenEvtRadius(){
+  const next=EVT_RADIUS_STEPS.find(v=>v>EVT_RADIUS);
+  if(next==null){ toast('이미 가장 넓은 반경이에요.'); return; }
+  EVT_RADIUS=next;
+  rankEvents(true);                                   // 목록·배너·지도 핀 갱신
+  if(_homeFeedMode==='places') renderFeed();          // 홈 '가볼만한곳' 목록 다시 그리기
+  toast(`반경을 ${fmtR(EVT_RADIUS)}로 넓혔어요.`);
+}
+
 // 지도에 찍을 축제 목록 — 배너용 40개 캡(EVENTS)이 아니라 전체 후보(_evtSrc)에서
 // 현재 지도 화면(뷰포트)에 실제로 들어오는 축제만 골라 실제 좌표에 표시한다.
 // 이렇게 해야 지도를 어디로 옮기든 그 위치의 축제가 제대로 연동되어 뜬다.
 function _eventsForMap(mapObj, cap){
   const src=(_evtSrc && _evtSrc.length) ? _evtSrc : EVENTS;
-  let list=(src||[]).filter(ev=>_validLatLng(ev.lat,ev.lng));
+  // 목록과 같은 기준: 좌표 있는 것만 + 끝난 행사/7일 밖 행사는 핀도 찍지 않는다.
+  // (반경은 목록과 달리 '지도에 보이는 영역' 기준 — 지도를 옮겨 다른 지역을 보는 동작은 그대로 둔다.)
+  let list=(src||[]).filter(ev=>_validLatLng(ev.lat,ev.lng) && _evtInWindow(ev));
   const vb=(mapObj && mapObj.getBounds && mapObj.getBounds()) || null;
   if(vb && vb.contain) list=list.filter(ev=>vb.contain(kll(ev.lat,ev.lng)));
   const base=_evtBase();
@@ -6348,18 +6457,16 @@ function closeLocPick(){
 // EVENT BANNER
 // ═══════════════════════════════════════════════
 // 축제 카드 HTML(배너·캐러셀 공용). 이미지 있으면 배경 사진+스크림, 없으면 그라데이션+이모지.
-// 진행 중(dday<=0)이면 "진행중" 빨강 뱃지.
+// D-day 뱃지: 시작 전 'D-3' / 진행 중 '진행중 · 8/30 종료'(초록) / 오늘·내일 종료면 빨강 강조.
 function _evtCardHtml(ev, base){
   const d=base?Math.round(dist(base.lat,base.lng,ev.lat,ev.lng)):null;
-  const hasDday=ev.dday!=null;                 // 행사 일정이 있을 때만 D-day 표시
-  const live=hasDday && ev.dday<=0;
-  const ddayStr=!hasDday?'':live?'진행중':ev.dday===1?'D-1':`D-${ev.dday}`;
+  const dday=_ddayBadgeHtml(ev,'evt-dday');    // 행사 일정이 있을 때만 뱃지가 생긴다
   const imgLayer=ev.img?`<img class="evt-card-img" src="${esc(ev.img)}" alt="" loading="lazy" onerror="this.remove()"><div class="evt-card-scrim"></div>`:'';
   const favBadge=_isFavEvent(ev)?`<div class="evt-fav-badge"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>`:'';
   return `<div class="evt-card${ev.img?' has-img':''}" style="background:${ev.grad}" onclick="openEvtDetail('${ev.id}')">
     ${imgLayer}${favBadge}
     ${d!=null?`<div class="evt-dist">${brandPin(12)} ${fmtDist(d)}</div>`:''}
-    ${hasDday?`<div class="evt-dday${live?' live':''}">${ddayStr}</div>`:''}
+    ${dday}
     ${ev.img?'':`<div class="evt-emoji">${ev.emoji}</div>`}
     ${_evtKindTag(ev)}
     <div class="evt-title">${esc(ev.title)}</div>
@@ -6424,13 +6531,11 @@ function openEvtDetail(id, fromMap, rerender){
   _curEvt = ev;
   const base=_evtBase();
   const d = base ? dist(base.lat,base.lng,ev.lat,ev.lng) : null;
-  const hasDday = ev.dday!=null;
-  const ddayStr = !hasDday?'':ev.dday<=0?'진행중':ev.dday===1?'D-1':`D-${ev.dday}`;
+  const ddayBadge = _ddayBadgeHtml(ev,'ed-hero-dday');   // 목록 카드와 같은 문구·색 규칙
 
   document.getElementById('edHdrTitle').textContent = ev.title;
 
   const hero=document.getElementById('edHero');
-  const live=hasDday && ev.dday<=0;
   // 대표 이미지가 있으면 사진 히어로. 없을 때: 실제 축제/행사는 그라데이션 배너 유지,
   // 장소 상세(isPlace)에서 사진이 없으면 상단 사진 영역을 통째로 생략(제목은 헤더에 남음).
   if(ev.img){
@@ -6438,14 +6543,14 @@ function openEvtDetail(id, fromMap, rerender){
     hero.style.background=`linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.55)),url('${ev.img}') center/cover no-repeat`;
     hero.style.minHeight='200px';
     hero.innerHTML = `<div class="ed-hero-title">${esc(ev.title)}</div>
-      ${hasDday?`<div class="ed-hero-dday${live?' live':''}">${ddayStr}</div>`:''}`;
+      ${ddayBadge}`;
   } else if(!ev.isPlace){
     hero.style.display='';
     hero.style.background=ev.grad;
     hero.style.minHeight='';
     hero.innerHTML = `<div class="ed-hero-emoji">${ev.emoji}</div>
       <div class="ed-hero-title">${esc(ev.title)}</div>
-      ${hasDday?`<div class="ed-hero-dday${live?' live':''}">${ddayStr}</div>`:''}`;
+      ${ddayBadge}`;
   } else {
     hero.style.display='none';
     hero.innerHTML='';
@@ -7094,16 +7199,30 @@ function _evtFullSyncIfOpen(){
   }
 }
 
+// 반경·기간 필터 결과가 0개일 때의 빈 화면(홈 목록·전체보기 공용).
+// 넓힐 여지가 남아 있으면 '반경 넓혀보기' 버튼을, 이미 최대 반경이면 다른 방법을 안내한다.
+function _evtEmptyHtml(){
+  const next=EVT_RADIUS_STEPS.find(v=>v>EVT_RADIUS);
+  const act=next
+    ? `<button class="empty-act" onclick="widenEvtRadius()">반경 ${fmtR(next)}로 넓혀보기</button>`
+    : '';
+  const tip=next
+    ? `지금은 ${fmtR(EVT_RADIUS)} 안에서 앞으로 ${EVT_WINDOW_DAYS}일 동안<br>열리는 행사만 보고 있어요`
+    : `${fmtR(EVT_RADIUS)} 안에도 이번 주 행사가 없어요<br>지도를 옮겨 다른 지역을 살펴보세요`;
+  return `<div class="empty"><div class="ei">🗓️</div>
+    <h4>이번 주 근처에 열리는 행사가 없어요</h4>
+    <p>${tip}</p>${act}</div>`;
+}
+
 // 가볼 만한 곳 카드 마크업(전체보기 목록 · 홈 피드 공용). cardId/onclick만 다르게.
 function _evtListCardHtml(ev, d, cardId, onclick){
-  const hasDday=ev.dday!=null, live=hasDday && ev.dday<=0;
-  const ddayStr=!hasDday?'':live?'진행중':ev.dday===1?'D-1':`D-${ev.dday}`;
+  const dday=_ddayBadgeHtml(ev,'evtf-dday');   // 시작 전 D-n / 진행중 · M/D 종료(종료 임박이면 빨강)
   const imgLayer=ev.img?`<img class="evtf-card-img" src="${esc(ev.img)}" alt="" loading="lazy" onerror="this.remove()"><div class="evtf-card-scrim"></div>`:'';
   const favBadge=_isFavEvent(ev)?`<div class="evt-fav-badge"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>`:'';
   return `<div class="evtf-card${ev.img?' has-img':''}"${cardId?` id="${cardId}"`:''} style="background:${ev.grad}" onclick="${onclick}">
     ${imgLayer}${favBadge}
     ${d!=null?`<div class="evtf-dist">${brandPin(12)} ${fmtDist(d)}</div>`:''}
-    ${hasDday?`<div class="evtf-dday${live?' live':''}">${ddayStr}</div>`:''}
+    ${dday}
     <div class="evtf-body">
       ${ev.img?'':`<div class="evtf-emoji">${ev.emoji}</div>`}
       <div class="evtf-title">${esc(ev.title)}</div>
@@ -7118,10 +7237,10 @@ function _renderHomePlaces(wrap){
   wrap.innerHTML='';
   const top=document.createElement('div');
   top.className='feed-top';
-  top.innerHTML=`<h3>가볼 만한 곳 ${EVENTS.length}개</h3><span class="r-now">${uiIcon(P_COMPASS,14)} ${fmtR(RADIUS)} 이내</span>`;
+  top.innerHTML=`<h3>가볼 만한 곳 ${EVENTS.length}개</h3><span class="r-now">${uiIcon(P_COMPASS,14)} ${fmtR(EVT_RADIUS)} 이내</span>`;
   wrap.appendChild(top);
   if(!EVENTS.length){
-    wrap.innerHTML+=`<div class="empty"><div class="ei">🧭</div><h4>이 반경엔 가볼 만한 곳이 없어요</h4><p>거리 필터를 넓히거나<br>지도를 옮겨 다른 지역을 살펴보세요</p></div>`;
+    wrap.innerHTML+=_evtEmptyHtml();
     return;
   }
   const holder=document.createElement('div');
@@ -7175,7 +7294,7 @@ function _renderEvtFullList(){
   if(!list) return;
   const base=_evtFullActiveBase();
   if(!EVENTS.length){
-    list.innerHTML=`<div class="empty"><div class="ei">🧭</div><h4>주변에 가볼 만한 곳이 없어요</h4><p>지도를 더블탭해<br>다른 지역을 살펴보세요</p></div>`;
+    list.innerHTML=_evtEmptyHtml();
     return;
   }
   list.innerHTML=EVENTS.map(ev=>{
