@@ -2845,15 +2845,32 @@ function renderFeed(){
     if(homeMapReady) refreshHomeMapPins();
     return;
   }
+  // 핫한 곳(가볼만한곳) 카드 하나를 피드 중간에 끼워넣는다(내 주변에서 가장 가까운 핫플). 핀 포커스 중엔 생략.
+  const hotSlot = focus ? -1 : Math.min(4, posts.length-1);
+  const hotCard = (hotSlot>=0) ? _nearestHotSpotCard(base) : null;
   // 게시물 사이에 축제 캐러셀을 끼워 넣는다(3번째 뒤, 이후 8개마다).
   posts.forEach((p,i)=>{
     wrap.appendChild(mkCard(p));
+    if(hotCard && i===hotSlot){ wrap.appendChild(hotCard); }
     const isSlot = i===2 || (i>2 && (i-2)%8===0);
     if(EVENTS.length && isSlot && i<posts.length-1){
       wrap.appendChild(mkEvtCarousel());
     }
   });
   if(homeMapReady) refreshHomeMapPins();
+}
+// 핫한 곳(핫플 묶음) 중 base(내 위치)에서 가장 가까운 한 곳의 카드. 피드 중간 삽입용. 없으면 null.
+//   판정은 공용 핫 판정(_computeHotPlaces, HOT_MIN=4)을 그대로 사용. 탭 → 기존 장소 상세(openPlaceDetail).
+function _nearestHotSpotCard(base){
+  let list=_hotPlaceList().filter(g=>_validLatLng(g.lat,g.lng));
+  if(base){   // 내 주변(≈20km) 핫플만, 가까운 순
+    list=list.filter(g=>dist(base.lat,base.lng,g.lat,g.lng)<=20000)
+             .sort((a,b)=>dist(base.lat,base.lng,a.lat,a.lng)-dist(base.lat,base.lng,b.lat,b.lng));
+  }
+  if(!list.length) return null;
+  const w=document.createElement('div'); w.className='hotplace-list';
+  w.appendChild(_mkHotPlaceCard(list[0]));
+  return w;
 }
 
 // 피드 사이에 끼어드는 가로 스크롤 축제 캐러셀(+ 페이지 인디케이터 점)
@@ -3671,7 +3688,8 @@ function enterNewsTab(){
   // 지도 생성 + 레이아웃 확정(섹션이 막 보였을 수 있어 relayout 후 초점 이동)
   setTimeout(()=>{
     initNewsMap();
-    setTimeout(()=>{ if(newsMapObj){ newsMapObj.relayout(); refreshNewsMapPins(); _newsFollowFocus(); } },220);
+    // 소식 진입 시 전국 뷰 유지(첫 글로 자동 이동하지 않음). relayout 후 영역 기준으로 다시 그린다.
+    setTimeout(()=>{ if(newsMapObj){ newsMapObj.relayout(); refreshNewsMapPins(true); } },220);
   },80);
 }
 
@@ -3886,13 +3904,24 @@ function collapseNewsMap(){
   document.getElementById('s-notifications').classList.remove('news-expanded');
   setTimeout(()=>{ if(newsMapObj){ newsMapObj.relayout(); refreshNewsMapPins(); } },300);
 }
+// 소식 지도 idle — 홈과 동일하게, 지도를 움직여 멈추면 보이는 영역 기준으로 마커 재계산(디바운스).
+let _newsPinsIdleT=null;
+function _newsPinsOnIdle(){
+  const el=document.getElementById('newsMap'); if(el) el.classList.remove('map-zooming');
+  if(_newsPinsIdleT) clearTimeout(_newsPinsIdleT);
+  _newsPinsIdleT=setTimeout(()=>{ _newsPinsIdleT=null; refreshNewsMapPins(); },110);
+}
+// 소식 지도 초기 뷰 — 전국이 보이도록 넓게(홈은 내 위치 중심). 이후 이동/스크롤에 따라 영역이 바뀐다.
+const NEWS_NATIONAL={lat:36.5, lng:127.9, level:13};
 function initNewsMap(){
   _whenKakao(function(){
     const el=document.getElementById('newsMap'); if(!el) return;
     if(!newsMapReady){
-      const c=LOC||{lat:37.5172,lng:127.0473};
-      newsMapObj=new kakao.maps.Map(el,{center:kll(c.lat,c.lng),level:_radiusToLevel(RADIUS)});
+      newsMapObj=new kakao.maps.Map(el,{center:kll(NEWS_NATIONAL.lat,NEWS_NATIONAL.lng),level:NEWS_NATIONAL.level});
       newsMapReady=true;
+      // 홈과 동일한 갱신 방식: idle(이동/줌 멈춤) + zoom_start.
+      kakao.maps.event.addListener(newsMapObj,'idle',_newsPinsOnIdle);
+      kakao.maps.event.addListener(newsMapObj,'zoom_start',()=>{ el.classList.add('map-zooming'); });
       const feed=document.getElementById('newsFeed');
       if(feed) feed.addEventListener('scroll',_onNewsFeedScroll,{passive:true});
       // 지도 빈 곳 탭 → 부분 확장(피드 내림). 피드를 위로 올리면(scrollTop>20) 복귀.
@@ -3900,23 +3929,19 @@ function initNewsMap(){
       if(feed) feed.addEventListener('scroll',()=>{ if(newsExpanded && feed.scrollTop>20) collapseNewsMap(); },{passive:true});
     }
     refreshNewsMapPins();
-    setTimeout(()=>{ if(newsMapObj){ newsMapObj.relayout(); _newsFollowFocus(); } },180);
+    // 초기엔 전국 뷰 유지(첫 글로 자동 이동하지 않음). relayout 후 영역 기준으로 다시 그린다.
+    setTimeout(()=>{ if(newsMapObj){ newsMapObj.relayout(); refreshNewsMapPins(true); } },180);
   });
 }
-function refreshNewsMapPins(){
+// 소식 지도 — 홈과 '완전히 같은' 공용 렌더 사용(지도가 보고 있는 영역 기준). 활성 링 대상(_newsActivePid)만 다름.
+let _newsMapState={sig:null};
+function refreshNewsMapPins(force){
   if(!newsMapObj) return;
-  newsMapMarkers.forEach(m=>{ try{ m.setMap(null); }catch(e){} }); newsMapMarkers=[];
-  if(newsMapCircle){ newsMapCircle.setMap(null); newsMapCircle=null; }
-  // 내 위치(공통 소스)
-  _drawMyLoc(newsMapObj, newsMapMarkers);
-  // 가볼만한 곳 — 홈 지도와 동일 소스(_drawSpotMarkers)로 소식 지도에도 표시(핫플이면 🔥).
-  //   (🔥 묶음 대표점 마커는 제거 — 핫은 각 핀/가볼만한곳의 우상단 🔥 배지로만 표시)
-  _drawSpotMarkers(newsMapObj, newsMapMarkers, _eventsForMap(newsMapObj, 15), 2);
-  // 개별 게시물 마커(모먼트=조회수 / 핀=핫플이면 🔥 — _placePostPin 공통 규칙). 현재 따라가는 글은 활성 링 강조.
-  (_newsList||[]).forEach(p=>{
-    if(!_validLatLng(p.lat,p.lng)) return;
-    const active=p.id===_newsActivePid;
-    newsMapMarkers.push(_placePostPin(newsMapObj,p,active,`newsPinTap('${p.id}')`,active?7:4));
+  _renderMapView(newsMapObj, newsMapMarkers, _newsMapState, {
+    force, cap:7,
+    activeId:_newsActivePid,
+    postTap:(id)=>`newsPinTap('${id}')`,
+    clearExtra:()=>{ if(newsMapCircle){ newsMapCircle.setMap(null); newsMapCircle=null; } },
   });
 }
 // 첫(또는 현재) 대상 위치로 지도 이동
@@ -4945,82 +4970,76 @@ function _homePinsOnIdle(){
   if(_homePinsIdleT) clearTimeout(_homePinsIdleT);
   _homePinsIdleT=setTimeout(()=>{ _homePinsIdleT=null; refreshHomeMapPins(); },110);
 }
-// 마지막으로 그린 마커 세트의 서명(위치/반경/활성/게시물·행사 id). 확대·축소·이동해도
-// 그려야 할 마커가 그대로면 오버레이를 통째로 재생성하지 않고 그대로 두어 버벅임을 없앤다.
-let _homePinsSig=null;
+// ═══════════════════════════════════════════════
+// 지도 공용 렌더 (홈·소식 동일 규칙) — "지도가 지금 보고 있는 영역 안의 것을 그린다"
+//   그리는 것: 영역 안 게시물 핀(핫 우선, 최대 cap개) · 영역 안 가볼만한곳 · 내 위치.
+//   홈/소식 차이는 '지도가 어디를 보는지' + 탭 전용 부가요소(홈 반경원·검색핀·인기스트립)뿐.
+//   → 소식 지도를 내 동네로 옮기면 홈과 '완전히 같은 마커'가 뜬다. 지도 수정은 여기 한 곳만 고치면 양쪽 반영.
+// ═══════════════════════════════════════════════
+// 지금 지도 뷰포트 안의 게시물 핀(핫 우선, 최대 cap개)
+function _viewportPins(mapObj, cap){
+  const now=Date.now();
+  const vb=(mapObj.getBounds && mapObj.getBounds())||null;
+  const inView=(lat,lng)=> (vb && vb.contain) ? vb.contain(kll(lat,lng)) : true;
+  const posts=S.posts().filter(p=> !p.area && !(p.kind==='moment'&&(now-p.ts)>DAY) && _validLatLng(p.lat,p.lng) && inView(p.lat,p.lng));
+  // 핫(핫플 묶음 포함) 우선 → 그다음 좋아요·최신
+  posts.sort((a,b)=> ((_isHotPost(b)?1:0)-(_isHotPost(a)?1:0)) || ((b.likes||0)-(a.likes||0)) || (b.ts-a.ts));
+  return posts.slice(0, cap||7);
+}
+// 공용 렌더. state={sig}(지도별 보관). opts:
+//   activeId, postTap(id)->onclick문자열, cap, force, sigExtra(탭 전용 서명),
+//   onData(posts,events), clearExtra(), drawExtra(), after()
+function _renderMapView(mapObj, markersArr, state, opts){
+  if(!mapObj) return null;
+  opts=opts||{};
+  const posts=_viewportPins(mapObj, opts.cap||7);
+  const events=_eventsForMap(mapObj, 15);
+  if(opts.onData) opts.onData(posts, events);
+  const rnd=(v)=>v==null?'-':(v.lat.toFixed(5)+','+v.lng.toFixed(5));
+  const sig=[ rnd(LOC), opts.activeId||'-', opts.sigExtra||'',
+    posts.map(p=>p.id).join(','), events.map(e=>e.id).join(',') ].join('|');
+  if(!opts.force && state.sig===sig && markersArr.length){ if(opts.after) opts.after(); return {posts, events}; }
+  state.sig=sig;
+  markersArr.forEach(m=>{ try{ m.setMap(null); }catch(e){} }); markersArr.length=0;
+  if(opts.clearExtra) opts.clearExtra();
+  _drawMyLoc(mapObj, markersArr);                     // 내 위치(공통)
+  if(opts.drawExtra) opts.drawExtra();                // 탭 전용(홈 반경원·검색핀)
+  posts.forEach(p=>{                                  // 게시물 핀(모먼트=조회수 / 핀=핫이면🔥)
+    const active=!!opts.activeId && p.id===opts.activeId;
+    markersArr.push(_placePostPin(mapObj, p, active, opts.postTap?opts.postTap(p.id):'', active?7:4));
+  });
+  _drawSpotMarkers(mapObj, markersArr, events, 2);    // 가볼만한곳(핫이면🔥)
+  if(opts.after) opts.after();
+  return {posts, events};
+}
+
+// 홈 지도 — 공용 렌더 사용. 탭 전용: 반경 원 + FEED_LOC 검색핀 + 인기 스트립.
+let _homeMapState={sig:null};
 function refreshHomeMapPins(force){
   if(!homeMapObj) return;
-
-  // ── 먼저 "무엇을 그릴지"만 계산한다(오버레이는 아직 건드리지 않음) ──
   const base=FEED_LOC||LOC;
-  // 화면(뷰포트)에 보이는 것 위주로만 표시 → 핀 과밀 방지
-  const vbounds = (homeMapObj.getBounds && homeMapObj.getBounds()) || null;
-  const inView = (lat,lng)=> (vbounds && vbounds.contain) ? vbounds.contain(kll(lat,lng)) : true;
-
-  // 게시물 핀 — 동네글·만료 모먼트 제외, 현재 선택된 반경 내(반경 없으면 뷰).
-  const now=Date.now();
-  let posts=S.posts().filter(p=> !p.area && !(p.kind==='moment' && (now-p.ts)>DAY));
-  if(base&&RADIUS<99999) posts=posts.filter(p=>dist(base.lat,base.lng,p.lat,p.lng)<=RADIUS);
-  else posts=posts.filter(p=>inView(p.lat,p.lng));
-
-  // 지도에는 두 종류를 함께 표시한다:
-  //  1) 내 글(모먼트/핀): 좋아요와 무관하게 반경 안이면 항상 표시(빨간 글로우 강조)
-  //  2) 인기 글(남의 글 포함): 좋아요 상위로 큐레이션한 기본 스타일
-  // 내 글이 인기글에도 들면 중복하지 않고 '내 글' 스타일 하나로만 표시한다.
-  const myPins = posts.filter(p=>p.uid===ME.id).sort((a,b)=>b.ts-a.ts);
-  const popular = posts.slice().sort((a,b)=>(b.likes||0)-(a.likes||0) || b.ts-a.ts).slice(0,7);
-  _popularPins = popular;                            // 상단 인기 스트립도 이 목록을 사용
-  const myIds=new Set(myPins.map(p=>p.id));
-  const popOnly = popular.filter(p=>!myIds.has(p.id));
-  const events = _eventsForMap(homeMapObj, 15);
-
-  // ── 서명 비교: 그릴 마커가 동일하면 재생성하지 않고 종료(확대·축소해도 부드럽게) ──
   const rnd=(v)=>v==null?'-':(v.lat.toFixed(5)+','+v.lng.toFixed(5));
-  const sig=[
-    rnd(LOC), rnd(FEED_LOC),
-    (base&&RADIUS<99999)?('R'+RADIUS+'@'+base.lat.toFixed(5)+','+base.lng.toFixed(5)):'noR',
-    _popActiveId||'-',
-    myPins.map(p=>p.id).join(','),
-    popOnly.map(p=>p.id).join(','),
-    events.map(e=>e.id).join(',')
-  ].join('|');
-  if(!force && sig===_homePinsSig && homeMapMarkers.length){ renderPopularStrip(); return; }
-  _homePinsSig=sig;
-
-  // ── 실제 재생성(마커 세트가 바뀐 경우에만 도달) ──
-  _clearCheckinPop();
-  homeMapMarkers.forEach(m=>m.setMap(null)); homeMapMarkers=[];
-  if(homeMapCircle){ homeMapCircle.setMap(null); homeMapCircle=null; }
-
-  // 내 위치 파란점(공통 소스) — z-index 최상단(MY_LOC_Z)로 다른 마커 위에 표시
-  _drawMyLoc(homeMapObj, homeMapMarkers);
-  // 반경 원
-  if(base&&RADIUS<99999){
-    const cc=FEED_LOC?'#F97316':'#A843D7';
-    homeMapCircle=new kakao.maps.Circle({
-      center:kll(base.lat,base.lng), radius:RADIUS,
-      strokeWeight:1.5, strokeColor:cc, strokeOpacity:0.8,
-      strokeStyle:'dashed', fillColor:cc, fillOpacity:0.06, map:homeMapObj
-    });
-  }
-  // 활성 위치(다른 동네 보는 중) — 검색 핀 + 얇은 주황 링. 탭하면 내 위치로 복귀.
-  if(FEED_LOC){
-    homeMapMarkers.push(_placePin(homeMapObj,FEED_LOC.lat,FEED_LOC.lng,'search',{ring:'active', onclick:'resetFeedLoc()', title:'다른 동네 보는 중 · 탭하면 내 위치로'},5));
-  }
-  // (체크인 마커는 홈 지도에 표시하지 않음 — 발자취는 프로필 지도에서만. 게시물·볼거리만 남김)
-  // (1) 내 글 — 항상 표시, 민트 링 강조. z-index를 인기글보다 위로. (우상단 조회수 배지)
-  myPins.forEach(p=>{
-    const active=p.id===_popActiveId;
-    homeMapMarkers.push(_placePostPin(homeMapObj,p,active,`homeMinePinTap('${p.id}')`,active?7:6,true));
+  _renderMapView(homeMapObj, homeMapMarkers, _homeMapState, {
+    force, cap:7,
+    activeId:_popActiveId,
+    postTap:(id)=>`homePopPinTap('${id}')`,
+    sigExtra:[ rnd(FEED_LOC), (base&&RADIUS<99999)?('R'+RADIUS+'@'+base.lat.toFixed(5)+','+base.lng.toFixed(5)):'noR' ].join('|'),
+    onData:(posts)=>{ _popularPins=posts; },   // 인기 스트립도 지도와 같은 목록 사용
+    clearExtra:()=>{ _clearCheckinPop(); if(homeMapCircle){ homeMapCircle.setMap(null); homeMapCircle=null; } },
+    drawExtra:()=>{
+      // 반경 원(홈 전용)
+      if(base&&RADIUS<99999){
+        const cc=FEED_LOC?'#F97316':'#A843D7';
+        homeMapCircle=new kakao.maps.Circle({ center:kll(base.lat,base.lng), radius:RADIUS,
+          strokeWeight:1.5, strokeColor:cc, strokeOpacity:0.8, strokeStyle:'dashed', fillColor:cc, fillOpacity:0.06, map:homeMapObj });
+      }
+      // 다른 동네 보는 중 — FEED_LOC 검색핀(홈 전용). 탭하면 내 위치로 복귀.
+      if(FEED_LOC){
+        homeMapMarkers.push(_placePin(homeMapObj,FEED_LOC.lat,FEED_LOC.lng,'search',{ring:'active', onclick:'resetFeedLoc()', title:'다른 동네 보는 중 · 탭하면 내 위치로'},5));
+      }
+    },
+    after:()=>{ renderPopularStrip(); },
   });
-  // (2) 인기 글 — 내 글과 중복 제거 후 기본 스타일(링 없음). (우상단 조회수 배지)
-  popOnly.forEach(p=>{
-    const active=p.id===_popActiveId;
-    homeMapMarkers.push(_placePostPin(homeMapObj,p,active,`homePopPinTap('${p.id}')`,active?5:3,true));
-  });
-  // 가볼만한 곳 핀 — 공통 소스(_drawSpotMarkers)로 그린다(홈·소식 동일 생김새). 핫플이면 우상단 🔥.
-  _drawSpotMarkers(homeMapObj, homeMapMarkers, events, 2);
-  renderPopularStrip();   // 최상단 인기 게시물 스트립 동기화(목록 동일하면 유지)
 }
 // 핀 탭 직후엔 지도 click(중심이동)을 무시하기 위한 가드
 let _homePinJustTapped=false;
@@ -6701,7 +6720,16 @@ function renderEvtStories(ev){
   }
   const holder=document.createElement('div');
   holder.className='ed-stories-list';
-  list.forEach(p=>holder.appendChild(mkCard(p)));
+  list.forEach(p=>{
+    const card=mkCard(p);
+    // 카드 본문(버튼·이미지·프로필 외)을 누르면 게시물 상세로 이동
+    card.style.cursor='pointer';
+    card.addEventListener('click',(e)=>{
+      if(e.target.closest && e.target.closest('button, a, img, .pc-user, .pc-imgs')) return;   // 좋아요·댓글·이미지·프로필은 원래 동작 유지
+      openDetail(p.id);
+    });
+    holder.appendChild(card);
+  });
   wrap.appendChild(holder);
 }
 
