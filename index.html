@@ -470,8 +470,7 @@ textarea.pta:focus{border-color:var(--primary)}
 /* 피드 패널을 홈(.feed-sheet)과 동일하게 — 위 모서리 둥글게 + 지도를 18px 덮으며 올라오는 느낌 + 위 그림자 + 손잡이 pill */
 .news-feed{flex:1;position:relative;z-index:2;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:var(--bg);min-height:0;border-radius:18px 18px 0 0;margin-top:-18px;box-shadow:0 -6px 18px rgba(0,0,0,.1);padding-top:6px}
 .news-feed::before{content:'';display:block;width:38px;height:4px;border-radius:2px;background:var(--border);margin:4px auto 4px}
-.news-sec-hdr{padding:14px 16px 6px;font-size:14px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:6px}
-.news-sec-hdr .sub{font-weight:600;color:var(--text3);font-size:12px}
+/* (.news-sec-hdr 제거 — 상단 '추천 소식' 헤더 줄 없앰) */
 .news-divider{display:flex;align-items:center;gap:10px;padding:22px 16px 14px;color:var(--text3);font-size:12px;font-weight:700;text-align:center}
 .news-divider::before,.news-divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .news-reco{padding:8px 0 12px;border-bottom:8px solid var(--bg)}
@@ -809,8 +808,7 @@ div:has(> .map-pulse-ring){pointer-events:none}
 .pop-dots .dot.on{background:var(--primary);width:20px;border-radius:4px}
 /* ── 최상단 인기 게시물 스트립(상시 표시 · 좌우 스와이프) ── */
 #popularStrip{background:var(--bg);padding:2px 0 6px;border-bottom:1px solid var(--border)}
-.pop-strip-hdr{font-size:15px;font-weight:800;color:var(--text);padding:8px 16px 6px}
-.pop-strip-sub{font-size:11px;font-weight:600;color:var(--text3);margin-left:6px}
+/* (.pop-strip-hdr / .pop-strip-sub 제거 — 상단 '인기 게시물' 헤더 줄 없앰) */
 .pop-strip-scroll{display:flex;align-items:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .pop-strip-scroll::-webkit-scrollbar{display:none}
 .pop-strip-slide{flex:0 0 88%;max-width:88%;min-width:88%;scroll-snap-align:center;padding:0 8px}
@@ -3773,12 +3771,7 @@ function renderNewsFeed(){
   }
 
   const frag=document.createDocumentFragment();
-  // 구역 나눔이 아닌 가벼운 상단 헤더 하나
-  const top=document.createElement('div'); top.className='news-sec-hdr';
-  top.innerHTML = followed.length
-    ? '✨ 추천 소식 <span class="sub">친구 · 전국 인기 · 핫플레이스</span>'
-    : '✨ 추천 소식 <span class="sub">전국에서 지금 뜨는 소식</span>';
-  frag.appendChild(top);
+  // (상단 '추천 소식' 헤더 줄 제거 — 지도·게시물이 더 보이도록 그 줄이 차지하던 세로 공간까지 없앰)
 
   items.forEach(it=>{
     if(it.type==='reco'){ frag.appendChild(_newsRecoBlock(followed.length===0)); return; }
@@ -5317,8 +5310,8 @@ function renderPopularStrip(force){
   _popStripKey=key; _popStripIdx=0;
   if(!list.length){ strip.style.display='none'; strip.innerHTML=''; return; }
   strip.style.display='block';
-  strip.innerHTML=`<div class="pop-strip-hdr" style="display:flex;align-items:center;gap:6px"><span style="color:var(--brand-strong);line-height:0">${uiIcon(P_FLAME,20)}</span>인기 게시물 <span class="pop-strip-sub">이 반경에서 지금 인기</span></div>
-    <div class="pop-strip-scroll" id="popStripScroll"></div>
+  // (상단 '인기 게시물 / 이 반경에서 지금 인기' 헤더 줄 제거 — 그 줄이 차지하던 세로 공간까지 없앰. 카드 스트립은 유지)
+  strip.innerHTML=`<div class="pop-strip-scroll" id="popStripScroll"></div>
     <div class="pop-strip-dots" id="popStripDots"></div>`;
   const scroll=document.getElementById('popStripScroll');
   const dots=document.getElementById('popStripDots');
